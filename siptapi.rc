@@ -87,6 +87,7 @@ BEGIN
     LTEXT           "For help and information got to www.enum.at",IDC_STATIC,
                     15,163,161,8
     GROUPBOX        "",IDC_STATIC,7,128,224,47
+    LTEXT           "v_0.2.1",IDC_STATIC,197,164,26,8
 END
 
 

@@ -226,6 +226,12 @@ DWORD tapiAstManager::processMessages(void)
 					if (je->type == EXOSIP_CALL_CLOSED) {
 						TspTrace("EXOSIP_CALL_CLOSED received: (%i %i) '%s'",je->cid,je->did,je->textinfo);
 						this->ongoingcall = 0;
+						if ( this->lineEvent != 0 ) {
+							TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
+							this->lineEvent( this->htLine, this->htCall,
+								LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
+								0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+						}
 						break;
 					}
 					if (je->type == EXOSIP_CALL_RELEASED) {
