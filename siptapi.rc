@@ -87,7 +87,7 @@ BEGIN
     LTEXT           "For help and information got to www.enum.at",IDC_STATIC,
                     15,163,161,8
     GROUPBOX        "",IDC_STATIC,7,128,224,47
-    LTEXT           "v_0.2.2",IDC_STATIC,197,164,26,8
+    LTEXT           "v_0.2.3",IDC_STATIC,197,164,26,8
 END
 
 
@@ -142,7 +142,7 @@ BEGIN
         BEGIN
             VALUE "Comments", "SIPTAPI - TAPI driver for generic SIP applications (based on asttapi)"
             VALUE "CompanyName", "enum.at (based on work from Omniis)"
-            VALUE "FileDescription", "SIP TAPI Service Provider 0.2.2"
+            VALUE "FileDescription", "SIP TAPI Service Provider 0.2.3"
             VALUE "FileVersion", "0, 0, 5, 0"
             VALUE "InternalName", "siptapi"
             VALUE "LegalCopyright", "Copyright (C) 2004"
