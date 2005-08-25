@@ -1,0 +1,3 @@
+- process incoming INVITE messages (if Asterisk sends a reINVITE, workaround: canreinvite=no in sip.conf)
+- check sipfrag response code in NOTIFY
+- check why exosip does not like the NOTIFYs from asterisk
