@@ -232,6 +232,12 @@ DWORD tapiAstManager::processMessages(void)
 								LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
 								0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
 						}
+						if ( this->lineEvent != 0 ) {
+							TSPTRACE("sending LINECALLSTATE_IDLE ...");
+							this->lineEvent( this->htLine, this->htCall,
+								LINE_CALLSTATE, LINECALLSTATE_IDLE,
+								0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+						}
 						break;
 					}
 					if (je->type == EXOSIP_CALL_RELEASED) {
@@ -249,12 +255,14 @@ DWORD tapiAstManager::processMessages(void)
 						//ToDo: check sipfrag response code
 						TspTrace("EXOSIP_CALL_REFER_STATUS received: (%i %i) '%s'",je->cid,je->did,je->textinfo);
 						TspTrace("sending BYE (ToDo: should check sipfrag response code)..");
+						eXosip_lock;
 						i = eXosip_call_terminate(je->cid, je->did);
 						if (i != 0) {
 							TspTrace("eXosip_call_terminate failed...");
 							eXosip_unlock();
 							break;
 						}
+						eXosip_unlock();
 						TspTrace("eXosip_call_terminate succeeded...");
 						if ( this->lineEvent != 0 ) {
 							TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
