@@ -28,6 +28,7 @@
 #include "wavetsp.h"
 #include <algorithm>
 #include <cctype>
+#include <CString>
 
 #include <eXosip2/eXosip.h>
 

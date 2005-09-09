@@ -340,6 +340,15 @@ DWORD astManager::originate(std::string destAddress)
 	osip_message_t *invite;
 	std::string route;
 
+	TspTrace("removing spaces and special characters from phone number...");
+	TspTrace("original number: %s",destAddress.data());
+	std::string::size_type pos;
+	while (	(pos = destAddress.find_first_not_of("0123456789")) != std::string::npos) {
+		destAddress.erase(pos,1);
+		TspTrace("bad digit found, new number is: %s",destAddress.data());
+	}
+	TspTrace("trimmed number: %s",destAddress.data());
+
 	this->to    = ("sip:")  + destAddress + ("@") +  this->originator;
 	this->from  = ("sip:")  + this->user  + ("@") +  this->originator;
 //	route       = ("<sip:") + this->host  + (";lr>");
