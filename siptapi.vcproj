@@ -20,7 +20,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="C:\exosip\exosip\osip\include;C:\exosip\exosip\exosip\include"
+				AdditionalIncludeDirectories="..\libosip2-2.2.1\include, ..\libeXosip2-1.9.1-pre17\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;ASTTAPI_EXPORTS;DEBUGTSP;BOOST_REGEX_NO_LIB"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -33,7 +33,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="WSOCK32.LIB C:\exosip\exosip\exosip\platform\windows\Debug\eXosip.lib C:\exosip\exosip\osip\platform\vsnet\Debug\osip2.lib C:\exosip\exosip\osip\platform\vsnet\Debug\osipparser2.lib Iphlpapi.lib"
+				AdditionalDependencies="WSOCK32.LIB ..\libeXosip2-1.9.1-pre17\platform\vsnet\Debug\eXosip.lib ..\libosip2-2.2.1\platform\vsnet\Debug\osip2.lib ..\libosip2-2.2.1\platform\vsnet\Debug\osipparser2.lib Iphlpapi.lib"
 				OutputFile="$(OutDir)/siptapi.tsp"
 				Version="0.1"
 				LinkIncremental="2"

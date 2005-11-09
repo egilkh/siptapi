@@ -89,12 +89,12 @@ DWORD tapiAstManager::processMessages(void)
 				TspTrace("Ongoing call = 1");
 				if (je != NULL) {
 					if (je->type == EXOSIP_CALL_TIMEOUT) {
-						TspTrace("EXOSIP_CALL_TIMEOUT received: (%i %i) '%s'",je->cid,je->did,je->textinfo);
+						TspTrace("EXOSIP_CALL_TIMEOUT received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
 						//this->ongoingcall = 0;
 						break;
 					}
 					if (je->type == EXOSIP_CALL_RELEASED) {
-						TspTrace("EXOSIP_CALL_RELEASED received: (%i %i) '%s'",je->cid,je->did,je->textinfo);
+						TspTrace("EXOSIP_CALL_RELEASED received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
 						this->ongoingcall = 0;
 						if ( this->lineEvent != 0 ) {
 							TSPTRACE("sending LINECALLSTATE_IDLE ...");
@@ -105,7 +105,7 @@ DWORD tapiAstManager::processMessages(void)
 						break;
 					}
 					if (je->type == EXOSIP_CALL_REQUESTFAILURE) {
-						TspTrace("EXOSIP_CALL_REQUESTFAILURE received: (%i %i) '%s'",je->cid,je->did,je->textinfo);
+						TspTrace("EXOSIP_CALL_REQUESTFAILURE received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
 						if (je->response != NULL) {
 							if (je->response->status_code == 487) {
 								TspTrace("Call successful canceled ...");
@@ -121,7 +121,7 @@ DWORD tapiAstManager::processMessages(void)
 						break;
 					}
 					if (je->type == EXOSIP_CALL_RINGING) {
-						TspTrace("EXOSIP_CALL_RINGING received: (%i %i) '%s'",je->cid,je->did,je->textinfo);
+						TspTrace("EXOSIP_CALL_RINGING received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
 						this->cid = je->cid;
 						this->did = je->did;
 						if ( this->lineEvent != 0 ) {
@@ -133,7 +133,7 @@ DWORD tapiAstManager::processMessages(void)
 						break;
 					}
 					if (je->type == EXOSIP_CALL_ANSWERED) {
-						TspTrace("EXOSIP_CALL_ANSWERED received: (%i %i) '%s'",je->cid,je->did,je->textinfo);
+						TspTrace("EXOSIP_CALL_ANSWERED received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
 						this->cid = je->cid;
 						this->did = je->did;
 						if ( this->lineEvent != 0 ) {
@@ -171,7 +171,7 @@ DWORD tapiAstManager::processMessages(void)
 				counter ++;
 				if (je != NULL) {
 					if (je->type == EXOSIP_CALL_CLOSED) {
-						TspTrace("EXOSIP_CALL_CLOSED received: (%i %i) '%s'",je->cid,je->did,je->textinfo);
+						TspTrace("EXOSIP_CALL_CLOSED received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
 						this->ongoingcall = 0;
 						counter = 0;
 						if ( this->lineEvent != 0 ) {
@@ -189,7 +189,7 @@ DWORD tapiAstManager::processMessages(void)
 						break;
 					}
 					if (je->type == EXOSIP_CALL_RELEASED) {
-						TspTrace("EXOSIP_CALL_RELEASED received: (%i %i) '%s'",je->cid,je->did,je->textinfo);
+						TspTrace("EXOSIP_CALL_RELEASED received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
 						this->ongoingcall = 0;
 						counter = 0;
 						if ( this->lineEvent != 0 ) {
@@ -249,7 +249,7 @@ DWORD tapiAstManager::processMessages(void)
 				TspTrace("Ongoing call = 3");
 				if (je != NULL) {
 					if (je->type == EXOSIP_CALL_CLOSED) {
-						TspTrace("EXOSIP_CALL_CLOSED received: (%i %i) '%s'",je->cid,je->did,je->textinfo);
+						TspTrace("EXOSIP_CALL_CLOSED received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
 						this->ongoingcall = 0;
 						if ( this->lineEvent != 0 ) {
 							TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
@@ -266,7 +266,7 @@ DWORD tapiAstManager::processMessages(void)
 						break;
 					}
 					if (je->type == EXOSIP_CALL_RELEASED) {
-						TspTrace("EXOSIP_CALL_RELEASED received: (%i %i) '%s'",je->cid,je->did,je->textinfo);
+						TspTrace("EXOSIP_CALL_RELEASED received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
 						this->ongoingcall = 0;
 						if ( this->lineEvent != 0 ) {
 							TSPTRACE("sending LINECALLSTATE_IDLE ...");
@@ -276,10 +276,21 @@ DWORD tapiAstManager::processMessages(void)
 						}
 						break;
 					}
-					if (je->type == EXOSIP_CALL_REFER_STATUS) {
+					// if (je->type == EXOSIP_CALL_REFER_STATUS) { // old exosip2 version
+					if (je->type == EXOSIP_CALL_MESSAGE_NEW) { // new exosip2 version
+						TspTrace("EXOSIP_CALL_MESSAGE_NEW received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
+						// check if request is a NOTIFY
+						if (0 != osip_strcasecmp (je->request->sip_method, "NOTIFY")) {
+							TspTrace("non NOTIFY received, ignore ...");
+							break;
+						}
+						// compare NOTIFY did with previous did
+						if (je->did != this->did) {
+							TspTrace("NOTIFY does not match the INVITE/REFER dialog, ignore ...");
+							break;
+						}
 						//ToDo: check sipfrag response code
-						TspTrace("EXOSIP_CALL_REFER_STATUS received: (%i %i) '%s'",je->cid,je->did,je->textinfo);
-						TspTrace("sending BYE (ToDo: should check sipfrag response code)..");
+						TspTrace("sending BYE (ToDo: check sipfrag response code)..");
 						eXosip_lock;
 						i = eXosip_call_terminate(je->cid, je->did);
 						if (i != 0) {

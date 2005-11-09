@@ -237,9 +237,10 @@ int astManager::astConnect(void)
 	int sipport = 5066;
 	int counter = 0;
 	while (1) {
-		i = eXosip_listen_to(IPPROTO_UDP, INADDR_ANY, sipport);
+		// old exosip2 version
+		// i = eXosip_listen_to(IPPROTO_UDP, INADDR_ANY, sipport);
 		// new eXosip requires
-		// i = eXosip_listen_addr(IPPROTO_UDP, INADDR_ANY, sipport, AF_INET, 0);
+		i = eXosip_listen_addr(IPPROTO_UDP, INADDR_ANY, sipport, AF_INET, 0);
 		if (i!=0) {
 			TspTrace("could not initialize transport layer at port %i",sipport);
 			sipport += 2;
@@ -386,9 +387,13 @@ DWORD astManager::originate(std::string destAddress)
 		"s=click2dial call\r\n"
 		"c=IN IP4 %s\r\n"
 		"t=0 0\r\n"
-		"m=audio %s RTP/AVP 0 \r\n"
-		"a=rtpmap:0 PCMU/8000\r\n",
+		"m=audio %s RTP/AVP 0 8 18 3 4 97 98\r\n"
+		"a=rtpmap:0 PCMU/8000\r\n"
+		"a=rtpmap:18 G729/8000\r\n"
+		"a=rtpmap:97 ilbc/8000\r\n"
+		"a=rtpmap:98 speex/8000\r\n",
 		localip, localip, "8000");
+	TspTrace("SDP = '%s'", tmp);
 	osip_message_set_body(invite, tmp, strlen(tmp));
 	osip_message_set_content_type(invite, "application/sdp");
 
