@@ -114,7 +114,8 @@ class astManager
 		void useInBoundRegex(bool YesNo);
 		void setContext(std::string context);
 		void setCallerID(std::string callerid);
-		void setUsernamePassword(std::string username, std::string password);
+		void setUsernamePassword(std::string username, std::string usernameexten, 
+			std::string password);
 		//things we can do
 		int astManager::astConnect(void);
 		DWORD originate(std::string destAddress);
@@ -137,6 +138,7 @@ protected:
 
 		//asterisk username and password
         std::string user;
+        std::string userexten;
         std::string pass;
         
         //error string we maintain
@@ -165,7 +167,7 @@ protected:
 
 
 		// klaus
-		std::string to, from;
+		std::string to, from, exten;
 		int cid, did;
 
 public:
