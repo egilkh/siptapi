@@ -439,7 +439,7 @@ LONG TSPIAPI TSPI_lineOpen(
   
     if ( ourConnection )
     {
-		std::string strData,strPass;
+		std::string strData,strPass,strExten;
 		DWORD intData;
 
 		//get our config parameters
@@ -467,12 +467,17 @@ LONG TSPIAPI TSPI_lineOpen(
 			TspTrace("Error: no SIP user configured");
 			return EPILOG(LINEERR_CALLUNAVAIL);
 		}
+		// SIP user's extension (for asterisk dummies)
+		if ( false == readConfigString("userexten", strExten) ) {
+			TspTrace("Info: no SIP user extension configured, using username...");
+			strExten = strData;
+		}
 		// SIP password
 		if ( false == readConfigString("pass", strPass) ) {
 			TspTrace("Error: no SIP password");
 			return EPILOG(LINEERR_CALLUNAVAIL);
 		}
-        ourConnection->setUsernamePassword(strData,strPass);
+        ourConnection->setUsernamePassword(strData,strExten,strPass);
 
 		// SIP Domain
 		if ( false == readConfigString("uchan", strData) ) {
@@ -1230,6 +1235,8 @@ BOOL CALLBACK ConfigDlgProc(
 		SetDlgItemInt(hwnd, IDC_PORT, tempInt,FALSE);
 		readConfigString("user", temp);
 		SetDlgItemText(hwnd, IDC_USER, temp.c_str());
+		readConfigString("userexten", temp);
+		SetDlgItemText(hwnd, IDC_USER_EXTEN, temp.c_str());
 		readConfigString("pass", temp);
 		SetDlgItemText(hwnd, IDC_PASS, temp.c_str());
 
@@ -1323,6 +1330,9 @@ BOOL CALLBACK ConfigDlgProc(
 
 			GetDlgItemText(hwnd, IDC_USER, szTemp, sizeof(szTemp));
 			storeConfigString("user", szTemp);
+			
+			GetDlgItemText(hwnd, IDC_USER_EXTEN, szTemp, sizeof(szTemp));
+			storeConfigString("userexten", szTemp);
 			
 			GetDlgItemText(hwnd, IDC_PASS, szTemp, sizeof(szTemp));
 			storeConfigString("pass", szTemp);

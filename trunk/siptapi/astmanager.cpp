@@ -121,9 +121,11 @@ void astManager::setPort(DWORD astPort)
 // Sets the hostname of the asterisk server we are connecting to.
 //
 ////////////////////////////////////////////////////////////////////////////////
-void astManager::setUsernamePassword(std::string username, std::string password)
+void astManager::setUsernamePassword(std::string username, std::string usernameexten,
+									 std::string password)
 {
     this->user = username;
+    this->userexten = usernameexten;
     this->pass = password;
 }
 
@@ -350,8 +352,9 @@ DWORD astManager::originate(std::string destAddress)
 	}
 	TspTrace("trimmed number: %s",destAddress.data());
 
-	this->to    = ("sip:")  + destAddress + ("@") +  this->originator;
-	this->from  = ("sip:")  + this->user  + ("@") +  this->originator;
+	this->to    = ("sip:")  + destAddress     + ("@") +  this->originator;
+	this->from  = ("sip:")  + this->user      + ("@") +  this->originator;
+	this->exten = ("sip:")  + this->userexten + ("@") +  this->originator;
 //	route       = ("<sip:") + this->host  + (";lr>");
 //	route       = ("\0");
 	if (this->host == "") {
@@ -365,7 +368,7 @@ DWORD astManager::originate(std::string destAddress)
 	TspTrace("Route: route.data()       ='%s'",route.data());
 
 	i = eXosip_call_build_initial_invite(&invite,
-		this->from.data(),		// to = from (to will be used for REFER)
+		this->exten.data(),		// send INVITE to users's extension (Asterisk workaround)
 		this->from.data(),		// from
 		route.data(),			// route
 		"click2dial call");		//subject
