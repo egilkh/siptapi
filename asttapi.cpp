@@ -833,12 +833,26 @@ LONG TSPIAPI TSPI_lineGetCallStatus(
 		DWORD_IN_ENTRY(hdCall)
 	END_PARAM_TABLE()
 
-	pls->dwTotalSize = sizeof(LINECALLSTATUS);
+	if (sizeof(LINECALLSTATUS) > pls->dwTotalSize) {
+		TSPTRACE("TSPI_lineGetCallStatus: ERROR: sizeof(LINECALLSTATUS) > dwTotalSize\r\n");
+		return EPILOG(LINEERR_NOMEM);
+	}
+
+	// TAPI Service PRovider MUST NOT write this member!
+	// http://msdn2.microsoft.com/en-us/library/ms725567.aspx
+	//	pls->dwTotalSize = sizeof(LINECALLSTATUS);
+	// we use all the fixed size members, thus we need at least the size of the fixed size members
 	pls->dwNeededSize = sizeof(LINECALLSTATUS);
-	pls->dwUsedSize = 0;
+	pls->dwUsedSize = sizeof(LINECALLSTATUS);
 	pls->dwCallStateMode = 0;
 
-	pls->dwCallPrivilege = LINECALLPRIVILEGE_MONITOR | LINECALLFEATURE_ACCEPT | LINECALLFEATURE_ANSWER | LINECALLFEATURE_COMPLETECALL | LINECALLFEATURE_DIAL | LINECALLFEATURE_DROP;
+//	TSPTRACE("TSPI_lineGetCallStatus: error: pls->dwTotalSize  = %d\r\n",pls->dwTotalSize);
+//	TSPTRACE("TSPI_lineGetCallStatus: error: pls->dwNeededSize = %d\r\n",pls->dwNeededSize);
+
+
+	// TAPI Service PRovider MUST NOT write this member!
+	// http://msdn2.microsoft.com/en-us/library/ms725567.aspx
+	// pls->dwCallPrivilege = LINECALLPRIVILEGE_MONITOR | LINECALLFEATURE_ACCEPT | LINECALLFEATURE_ANSWER | LINECALLFEATURE_COMPLETECALL | LINECALLFEATURE_DIAL | LINECALLFEATURE_DROP;
 	//LINECALLPRIVILEGE_NONE 
 	//LINECALLPRIVILEGE_OWNER 
 
@@ -847,26 +861,28 @@ LONG TSPIAPI TSPI_lineGetCallStatus(
 
 	lineMut.Lock();
 	mapLine::iterator it;
+	int found=0;
 	for ( it = trackLines.begin() ; it != trackLines.end(); it++ )
 	{
 		astTspGlue *ourCall;
 		if ( ( ourCall = (*it).second->findCall(hdCall)) != NULL )
 		{
 			TSPTRACE("Found call - getting state\r\n");
-
+			found = 1;
 			pls->dwCallState = ourCall->getState();
 				//LINECALLSTATE_OFFERING;
 				//LINECALLSTATE_CONNECTED;
 				//LINECALLSTATE_OFFERING
 				//LINECALLSTATE_DISCONNECTED
-
-			
-
 		}
 	}
 	lineMut.Unlock();
 
-    return EPILOG(0);
+	if (found) {
+		return EPILOG(0);
+	} else {
+		return EPILOG(LINEERR_INVALCALLHANDLE);
+	}
 }
 
 //Required (maybe) by lineGetCallInfo
