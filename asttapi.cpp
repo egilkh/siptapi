@@ -833,12 +833,15 @@ LONG TSPIAPI TSPI_lineGetCallStatus(
 		DWORD_IN_ENTRY(hdCall)
 	END_PARAM_TABLE()
 
+	TSPTRACE("TSPI_lineGetCallStatus: ERROR: pls->dwTotalSize      = %d\r\n",pls->dwTotalSize);
+	TSPTRACE("TSPI_lineGetCallStatus: ERROR: sizeof(LINECALLSTATUS)= %d\r\n",sizeof(LINECALLSTATUS));
+
 	if (sizeof(LINECALLSTATUS) > pls->dwTotalSize) {
 		TSPTRACE("TSPI_lineGetCallStatus: ERROR: sizeof(LINECALLSTATUS) > dwTotalSize\r\n");
 		return EPILOG(LINEERR_NOMEM);
 	}
 
-	// TAPI Service PRovider MUST NOT write this member!
+	// TAPI Service Provider MUST NOT write this member!
 	// http://msdn2.microsoft.com/en-us/library/ms725567.aspx
 	//	pls->dwTotalSize = sizeof(LINECALLSTATUS);
 	// we use all the fixed size members, thus we need at least the size of the fixed size members
@@ -846,8 +849,8 @@ LONG TSPIAPI TSPI_lineGetCallStatus(
 	pls->dwUsedSize = sizeof(LINECALLSTATUS);
 	pls->dwCallStateMode = 0;
 
-//	TSPTRACE("TSPI_lineGetCallStatus: error: pls->dwTotalSize  = %d\r\n",pls->dwTotalSize);
-//	TSPTRACE("TSPI_lineGetCallStatus: error: pls->dwNeededSize = %d\r\n",pls->dwNeededSize);
+	TSPTRACE("TSPI_lineGetCallStatus: error: pls->dwTotalSize  = %d\r\n",pls->dwTotalSize);
+	TSPTRACE("TSPI_lineGetCallStatus: error: pls->dwNeededSize = %d\r\n",pls->dwNeededSize);
 
 
 	// TAPI Service PRovider MUST NOT write this member!

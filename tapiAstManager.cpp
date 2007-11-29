@@ -291,7 +291,7 @@ DWORD tapiAstManager::processMessages(void)
 						}
 						//ToDo: check sipfrag response code
 						TspTrace("sending BYE (ToDo: check sipfrag response code)..");
-						eXosip_lock;
+						eXosip_lock();
 						i = eXosip_call_terminate(je->cid, je->did);
 						if (i != 0) {
 							TspTrace("eXosip_call_terminate failed...");

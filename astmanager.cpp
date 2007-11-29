@@ -354,7 +354,11 @@ DWORD astManager::originate(std::string destAddress)
 
 	this->to    = ("sip:")  + destAddress     + ("@") +  this->originator;
 	this->from  = ("sip:")  + this->user      + ("@") +  this->originator;
-	this->exten = ("sip:")  + this->userexten + ("@") +  this->originator;
+	if (this->exten == "") {
+		this->exten = ("sip:")  + this->user + ("@") +  this->originator;
+	} else {
+		this->exten = ("sip:")  + this->userexten + ("@") +  this->originator;
+	}
 //	route       = ("<sip:") + this->host  + (";lr>");
 //	route       = ("\0");
 	if (this->host == "") {
@@ -363,9 +367,10 @@ DWORD astManager::originate(std::string destAddress)
 		route   = ("<sip:") + this->host  + (">");
 	}
 
-	TspTrace("To:    this->to.data()    ='%s'",this->to.data());
-	TspTrace("From:  this->from.data()  ='%s'",this->from.data());
-	TspTrace("Route: route.data()       ='%s'",route.data());
+	TspTrace("From:     this->from.data()  ='%s'",this->from.data());
+	TspTrace("To:       this->exten.data() ='%s'",this->exten.data());
+	TspTrace("Refer-To: this->to.data()    ='%s'",this->to.data());
+	TspTrace("Route:    route.data()       ='%s'",route.data());
 
 	i = eXosip_call_build_initial_invite(&invite,
 		this->exten.data(),		// send INVITE to users's extension (Asterisk workaround)
