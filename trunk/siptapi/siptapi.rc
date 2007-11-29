@@ -87,7 +87,7 @@ BEGIN
     LTEXT           "For help and information got to www.enum.at",IDC_STATIC,
                     15,221,161,8
     GROUPBOX        "",IDC_STATIC,7,183,224,47
-    LTEXT           "v_0.2.5pre2",IDC_STATIC,182,219,41,8
+    LTEXT           "v_0.2.5pre3",IDC_STATIC,182,219,41,8
     LTEXT           "User's extension (optional)",IDC_STATIC,15,135,88,10
     EDITTEXT        IDC_USER_EXTEN,110,132,121,13,ES_AUTOHSCROLL
 END
