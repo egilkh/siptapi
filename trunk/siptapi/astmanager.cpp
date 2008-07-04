@@ -346,7 +346,7 @@ DWORD astManager::originate(std::string destAddress)
 	TspTrace("removing spaces and special characters from phone number...");
 	TspTrace("original number: %s",destAddress.data());
 	std::string::size_type pos;
-	while (	(pos = destAddress.find_first_not_of("0123456789")) != std::string::npos) {
+	while (	(pos = destAddress.find_first_not_of("*#0123456789")) != std::string::npos) {
 		destAddress.erase(pos,1);
 		TspTrace("bad digit found, new number is: %s",destAddress.data());
 	}
