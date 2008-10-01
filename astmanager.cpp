@@ -354,7 +354,7 @@ DWORD astManager::originate(std::string destAddress)
 
 	this->to    = ("sip:")  + destAddress     + ("@") +  this->originator;
 	this->from  = ("sip:")  + this->user      + ("@") +  this->originator;
-	if (this->exten == "") {
+	if (this->userexten == "") {
 		this->exten = ("sip:")  + this->user + ("@") +  this->originator;
 	} else {
 		this->exten = ("sip:")  + this->userexten + ("@") +  this->originator;
