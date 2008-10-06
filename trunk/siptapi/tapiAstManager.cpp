@@ -286,9 +286,29 @@ DWORD tapiAstManager::processMessages(void)
 						}
 						// compare NOTIFY did with previous did
 						if (je->did != this->did) {
-							TspTrace("NOTIFY does not match the INVITE/REFER dialog, ignore ...");
+							eXosip_lock();
+							TspTrace("NOTIFY does not match the INVITE/REFER dialog ... 481");
+							if (0 != eXosip_call_send_answer(je->tid, 481, NULL)) {
+								TspTrace("error: eXosip_call_send_answer failed ...");
+							}
+							eXosip_unlock();
 							break;
 						}
+						// respond to NOTIFY with 200 OK
+						osip_message_t *answer;
+						eXosip_lock();
+						TspTrace("building answer to NOTIFY ...\n");
+						if (0 != eXosip_call_build_answer(je->tid, 200, &answer)) {
+							TspTrace("eXosip_call_build_answer failed...\n");
+						} else {
+							TspTrace("eXosip_call_build_answer succeeded...\n");
+							if (0 != eXosip_call_send_answer(je->tid, 200, answer)) {
+								TspTrace("eXosip_call_send_answer failed...\n");
+							} else {
+								TspTrace("sending answer ... done\n");
+							}
+						}
+						eXosip_unlock();
 						//ToDo: check sipfrag response code
 						TspTrace("sending BYE (ToDo: check sipfrag response code)..");
 						eXosip_lock();
