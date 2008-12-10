@@ -1460,7 +1460,7 @@ LONG TSPIAPI TUISPI_lineConfigDialog(                                        // 
 	DialogBox(g_hinst,
         MAKEINTRESOURCE(IDD_DIALOG1),
         hwndOwner,
-        ConfigDlgProc);
+        (DLGPROC) ConfigDlgProc);
 
 	return EPILOG(0);
 }
@@ -1523,7 +1523,7 @@ LONG TSPIAPI TUISPI_providerConfig(
 	DialogBox(g_hinst,
         MAKEINTRESOURCE(IDD_DIALOG1),
         hwndOwner,
-        ConfigDlgProc);
+        (DLGPROC) ConfigDlgProc);
 
     return EPILOG(0);
 }

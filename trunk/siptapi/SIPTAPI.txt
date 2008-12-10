@@ -14,6 +14,14 @@ Build instructions (windows xp, visual studio.net):
 - Specify the location of the osip/exosip header fiels and libraries in the siptapi project
 - build the siptapi
 
+- to build 64 bit version you have to additionally:
+  - build osip/eXosip in 64bit
+  - use Visual Studio >= 2005
+  - delete siptapi.vcproj
+  - rename siptapi.vcproj-vs2005 to siptapi.vcproj
+  - open siptapi-vs2005.sln
+
+
 Installation:
 - copy the siptapi.tsp file into \windows\system32\
 - Start -> ControlPanel -> PhoneAndModemOptions -> Advanced -> Add -> SIP TAPI Service Provider
