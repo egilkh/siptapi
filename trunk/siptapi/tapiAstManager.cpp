@@ -83,7 +83,7 @@ DWORD tapiAstManager::processMessages(void)
 //		TspTrace("this->ongoingcall before switch() = '%i'",this->ongoingcall);
 		switch(this->ongoingcall) {
 			case 0:
-				TspTrace("No ongoing call, doing nothing...");
+				TspTrace("No ongoing call, doing nothing...\n");
 				break;
 			case 1:
 				TspTrace("Ongoing call = 1");
@@ -116,9 +116,28 @@ DWORD tapiAstManager::processMessages(void)
 										LINE_CALLSTATE, LINECALLSTATE_IDLE,
 										0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
 								}
+								break;
 							}
+							if ((je->response->status_code == 407) || (je->response->status_code == 404)) {
+								TspTrace("Authentication required ... will be handled by SIP stack");
+								break;
+							}
+							this->ongoingcall = 0;
+							counter = 0;
+							if ( this->lineEvent != 0 ) {
+								TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
+								this->lineEvent( this->htLine, this->htCall,
+									LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
+									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+							}
+							if ( this->lineEvent != 0 ) {
+								TSPTRACE("sending LINECALLSTATE_IDLE ...");
+								this->lineEvent( this->htLine, this->htCall,
+									LINE_CALLSTATE, LINECALLSTATE_IDLE,
+									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+							}
+							break;
 						}
-						break;
 					}
 					if (je->type == EXOSIP_CALL_RINGING) {
 						TspTrace("EXOSIP_CALL_RINGING received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
