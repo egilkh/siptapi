@@ -1832,10 +1832,12 @@ TSPI_lineGetAddressStatus(
 	//This function can be expanded when we impliment
 	//parking, transfer etc
 
-	lpAddressStatus->dwTotalSize = sizeof(LINEADDRESSSTATUS);  
+	lpAddressStatus->dwUsedSize = sizeof(LINEADDRESSSTATUS); 
 	lpAddressStatus->dwNeededSize = sizeof(LINEADDRESSSTATUS); 
 
-
+	TspTrace("TSPI_lineGetAddressStatus: received: dwNumInUse = %ld", lpAddressStatus->dwNumInUse);
+	TspTrace("TSPI_lineGetAddressStatus: received: dwNumActiveCalls = %ld", lpAddressStatus->dwNumActiveCalls);
+	TspTrace("TSPI_lineGetAddressStatus: received: dwAddressFeatures = %ld", lpAddressStatus->dwAddressFeatures);
 	lineMut.Lock();
 	mapLine::iterator it = trackLines.find(hdLine);
 	if ( it != trackLines.end() )
@@ -1845,7 +1847,7 @@ TSPI_lineGetAddressStatus(
 		lpAddressStatus->dwNumActiveCalls = (*it).second->getNumCalls();  
 		lpAddressStatus->dwNumOnHoldCalls = 0;  
 		lpAddressStatus->dwNumOnHoldPendCalls = 0;  
-		//DWORD dwAddressFeatures;  
+		lpAddressStatus->dwAddressFeatures = LINEADDRFEATURE_MAKECALL;
 		//DWORD dwNumRingsNoAnswer;  
 		//DWORD dwForwardNumEntries;  
 		//DWORD dwForwardSize; 
@@ -1856,6 +1858,10 @@ TSPI_lineGetAddressStatus(
 		//DWORD dwDevSpecificOffset;
 	}
 	lineMut.Unlock();
+
+	TspTrace("TSPI_lineGetAddressStatus: send: dwNumInUse = %ld", lpAddressStatus->dwNumInUse);
+	TspTrace("TSPI_lineGetAddressStatus: send: dwNumActiveCalls = %ld", lpAddressStatus->dwNumActiveCalls);
+	TspTrace("TSPI_lineGetAddressStatus: send: dwAddressFeatures = %ld", lpAddressStatus->dwAddressFeatures);
 
 	return EPILOG(0);
 }

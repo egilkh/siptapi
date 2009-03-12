@@ -1,5 +1,9 @@
 SIPTAPI README
 
+v. 0.2.6
+- fix bug: works now also with Lotus Organizer
+- fix bug: better error handling for SIP errors (still todo: async)
+
 v. 0.2.5
 - supports 64bit too
 
