@@ -222,6 +222,7 @@ int astManager::astConnect(void)
 	TSPTRACE("initializing eXosip2...");
 
 	int i;
+	char version_string[100];
 
 	TRACE_INITIALIZE (6, stdout);
 
@@ -257,6 +258,9 @@ int astManager::astConnect(void)
 		TspTrace("SIP stack uses port %i for SIP signaling",sipport);
 		break;
 	}
+
+	snprintf(version_string, 100, "ipcom.at SIPTAPI " SIPTAPI_VERSION " / eXosip %s", eXosip_get_version());
+	eXosip_set_user_agent(version_string);
 
 	this->s = 1;
 	return 1;
