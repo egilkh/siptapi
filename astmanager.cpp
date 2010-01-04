@@ -219,6 +219,7 @@ void astManager::setCallerID(std::string callerid)
 int astManager::astConnect(void)
 {
 	TSPTRACE("astManager::astConnect...");
+	TSPTRACE("ipcom.at SIPTAPI " SIPTAPI_VERSION " / eXosip %s: Opening Line ...",eXosip_get_version());
 	TSPTRACE("initializing eXosip2...");
 
 	int i;
@@ -717,17 +718,24 @@ void astManager::dropChannel(std::string channel)
 		i = eXosip_call_terminate(this->cid, this->did);
 		if (i!=0)
 		{
-			TspTrace("eXosip_call_terminate failed ...");
+			TspTrace("dropChannel: eXosip_call_terminate failed ... probably line was closed already");
+		} else {
+			TspTrace("dropChannel: eXosip_call_terminate succeeded ...");
 		}
-		TspTrace("eXosip_call_terminate succeeded ...");
 	} else {
-		TspTrace("no ongoing call, just say OK...");
-		if ( this->lineEvent != 0 ) {
-			TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
-			this->lineEvent( this->htLine, this->htCall,
-				LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
-				0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
-		}
+		TspTrace("dropChannel: no ongoing call, just say OK...");
+	}
+	if ( this->lineEvent != 0 ) {
+		TspTrace("dropChannel: sending DICONNECTED and IDLE ...");
+		TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
+		this->lineEvent( this->htLine, this->htCall,
+			LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
+			0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+		TSPTRACE("sending LINECALLSTATE_IDLE ...");
+		this->lineEvent( this->htLine, this->htCall,
+			LINE_CALLSTATE, LINECALLSTATE_IDLE,
+			0, 0 );
+		this->ongoingcall = 0;
 	}
 
 
