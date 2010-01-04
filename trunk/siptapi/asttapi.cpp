@@ -270,8 +270,8 @@ LONG TSPIAPI TSPI_lineGetDevCaps(
     END_PARAM_TABLE()
 
     LONG            tr = 0;
-   const wchar_t   szProviderInfo[] = L"ProviderInfo: SIP TAPI for click2dial";
-    const wchar_t   szLineName[] = L"LineName: SIP TAPI for click2dial";
+   const wchar_t   szProviderInfo[] = L"SIPTAPI, a SIP TAPI provider for click2dial";
+    const wchar_t   szLineName[] = L"SIPTAPI " SIPTAPI_VERSION_W;
 
     pldc->dwNeededSize = sizeof(LINEDEVCAPS) +
                          sizeof(szProviderInfo) +
@@ -436,7 +436,7 @@ LONG TSPIAPI TSPI_lineOpen(
 
     tapiAstManager *ourConnection;
     ourConnection = new tapiAstManager;
-  
+
     if ( ourConnection )
     {
 		std::string strData,strPass,strExten;
@@ -732,7 +732,8 @@ LONG TSPIAPI TSPI_lineDrop(
     /* TODO (Nick#1#): Make this part a true asyncronous call */
 	if ( g_pfnCompletionProc )
 	{
-        g_pfnCompletionProc(dwRequestID, 0);
+		TSPTRACE("Sending ASYNC completion ...");
+		g_pfnCompletionProc(dwRequestID, 0);
 	}
     
     return EPILOG(dwRequestID);

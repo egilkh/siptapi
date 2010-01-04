@@ -67,7 +67,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 IDD_DIALOG1 DIALOGEX 0, 0, 238, 237
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
     WS_SYSMENU
-CAPTION "Configure SIP TAPI Service Provider"
+CAPTION "SIPTAPI Configuration"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,15,195,50,14
@@ -81,13 +81,14 @@ BEGIN
     EDITTEXT        IDC_UCHAN,93,20,138,13,ES_AUTOHSCROLL
     PUSHBUTTON      "Apply",IDC_APPLY,93,195,50,14
     GROUPBOX        "User Information",IDC_STATIC,7,66,224,93
-    LTEXT           "SIP TAPI Service Provider.",IDC_STATIC,15,214,201,8
+    LTEXT           "SIPTAPI: A TAPI Service Provider based on SIP",
+                    IDC_STATIC,15,214,201,8
     LTEXT           "SIP Domain",IDC_STATIC,15,23,45,10
     GROUPBOX        "SIP Configuration",IDC_STATIC,7,3,224,58
-    LTEXT           "For help and information got to www.enum.at",IDC_STATIC,
-                    15,221,161,8
+    LTEXT           "For help and information got to www.ipcom.at",
+                    IDC_STATIC,15,221,161,8
     GROUPBOX        "",IDC_STATIC,7,183,224,47
-    LTEXT           "v_0.2.6",IDC_STATIC,197,219,26,8
+    LTEXT           "v_0.2.7",IDC_STATIC,197,219,26,8
     LTEXT           "User's extension (optional)",IDC_STATIC,15,135,88,10
     EDITTEXT        IDC_USER_EXTEN,110,132,121,13,ES_AUTOHSCROLL
 END
@@ -126,8 +127,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,0,5,0
- PRODUCTVERSION 1,0,0,0
+ FILEVERSION 0,2,7,0
+ PRODUCTVERSION 0,2,7,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -142,16 +143,16 @@ BEGIN
     BEGIN
         BLOCK "080904b0"
         BEGIN
-            VALUE "Comments", "SIPTAPI - TAPI driver for generic SIP applications (based on asttapi)"
-            VALUE "CompanyName", "enum.at (based on work from Omniis)"
-            VALUE "FileDescription", "SIP TAPI Service Provider 0.2.6"
-            VALUE "FileVersion", "0, 0, 5, 0"
+            VALUE "Comments", "SIPTAPI - a TAPI service provider for the SIP"
+            VALUE "CompanyName", "enum.at"
+            VALUE "FileDescription", "SIPTAPI Service Provider 0.2.7"
+            VALUE "FileVersion", "0, 2, 7, 0"
             VALUE "InternalName", "siptapi"
-            VALUE "LegalCopyright", "Copyright (C) 2004, 2005, 2006"
+            VALUE "LegalCopyright", "Copyright (C) 2004, 2005, 2006, 2009"
             VALUE "LegalTrademarks", "Please see the copyright notice for further information"
             VALUE "OriginalFilename", "siptapi.tsp"
             VALUE "ProductName", "siptapi"
-            VALUE "ProductVersion", "1, 0, 0, 0"
+            VALUE "ProductVersion", "0, 2, 7, 0"
         END
     END
     BLOCK "VarFileInfo"

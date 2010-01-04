@@ -95,19 +95,21 @@ DWORD tapiAstManager::processMessages(void)
 					}
 					if (je->type == EXOSIP_CALL_RELEASED) {
 						TspTrace("EXOSIP_CALL_RELEASED received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
-						this->ongoingcall = 0;
-						if ( this->lineEvent != 0 ) {
-							TSPTRACE("sending LINECALLSTATE_IDLE ...");
-							this->lineEvent( this->htLine, this->htCall,
-								LINE_CALLSTATE, LINECALLSTATE_IDLE,
-								0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+						if (je->cid == this->cid ) {
+							this->ongoingcall = 0;
+							if ( this->lineEvent != 0 ) {
+								TSPTRACE("sending LINECALLSTATE_IDLE ...");
+								this->lineEvent( this->htLine, this->htCall,
+									LINE_CALLSTATE, LINECALLSTATE_IDLE,
+									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+							}
 						}
 						break;
 					}
 					if (je->type == EXOSIP_CALL_REQUESTFAILURE) {
 						TspTrace("EXOSIP_CALL_REQUESTFAILURE received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
 						if (je->response != NULL) {
-							if (je->response->status_code == 487) {
+							if ( (je->response->status_code == 487) && (je->cid == this->cid ) ) {
 								TspTrace("Call successful canceled ...");
 								this->ongoingcall = 0;
 								if ( this->lineEvent != 0 ) {
@@ -118,7 +120,7 @@ DWORD tapiAstManager::processMessages(void)
 								}
 								break;
 							}
-							if ((je->response->status_code == 407) || (je->response->status_code == 404)) {
+							if ((je->response->status_code == 407) || (je->response->status_code == 401)) {
 								TspTrace("Authentication required ... will be handled by SIP stack");
 								break;
 							}
@@ -141,46 +143,48 @@ DWORD tapiAstManager::processMessages(void)
 					}
 					if (je->type == EXOSIP_CALL_RINGING) {
 						TspTrace("EXOSIP_CALL_RINGING received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
-						this->cid = je->cid;
-						this->did = je->did;
-						if ( this->lineEvent != 0 ) {
-							TSPTRACE("sending LINEDEVSTATE_RINGING ...");
-							this->lineEvent(this->htLine, NULL,
-								LINE_LINEDEVSTATE, LINEDEVSTATE_RINGING,
-								0, 0 /* RingCount*/);
+						if (je->cid == this->cid ) {
+							this->did = je->did;
+							if ( this->lineEvent != 0 ) {
+								TSPTRACE("sending LINEDEVSTATE_RINGING ...");
+								this->lineEvent(this->htLine, NULL,
+									LINE_LINEDEVSTATE, LINEDEVSTATE_RINGING,
+									0, 0 /* RingCount*/);
+							}
 						}
 						break;
 					}
 					if (je->type == EXOSIP_CALL_ANSWERED) {
 						TspTrace("EXOSIP_CALL_ANSWERED received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
-						this->cid = je->cid;
-						this->did = je->did;
-						if ( this->lineEvent != 0 ) {
-							TSPTRACE("sending LINECALLSTATE_CONNECTED ...");
-							this->lineEvent( this->htLine, this->htCall,
-								LINE_CALLSTATE, LINECALLSTATE_CONNECTED,
-								0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
-						}
-						osip_message_t *ack;
-						eXosip_lock();
-						i = eXosip_call_build_ack(je->did, &ack);
-						if (i != 0) {
-							TspTrace("eXosip_call_build_ack failed...");
+						if (je->cid == this->cid ) {
+							this->did = je->did;
+							if ( this->lineEvent != 0 ) {
+								TSPTRACE("sending LINECALLSTATE_CONNECTED ...");
+								this->lineEvent( this->htLine, this->htCall,
+									LINE_CALLSTATE, LINECALLSTATE_CONNECTED,
+									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+							}
+							osip_message_t *ack;
+							eXosip_lock();
+							i = eXosip_call_build_ack(je->did, &ack);
+							if (i != 0) {
+								TspTrace("eXosip_call_build_ack failed...");
+								eXosip_unlock();
+								break;
+							}
+							TspTrace("eXosip_call_build_ack succeeded...");
+							i = eXosip_call_send_ack(je->did, ack);
+							if (i != 0) {
+								TspTrace("eXosip_call_send_ack failed...");
+								eXosip_unlock();
+								break;
+							}
+							TspTrace("eXosip_call_send_ack succeeded...");
+							this->ongoingcall = 2;
 							eXosip_unlock();
-							break;
+							counter = 0;
+							did = je->did;
 						}
-						TspTrace("eXosip_call_build_ack succeeded...");
-						i = eXosip_call_send_ack(je->did, ack);
-						if (i != 0) {
-							TspTrace("eXosip_call_send_ack failed...");
-							eXosip_unlock();
-							break;
-						}
-						TspTrace("eXosip_call_send_ack succeeded...");
-						this->ongoingcall = 2;
-						eXosip_unlock();
-						counter = 0;
-						did = je->did;
 						break;
 					}
 				}
@@ -191,37 +195,41 @@ DWORD tapiAstManager::processMessages(void)
 				if (je != NULL) {
 					if (je->type == EXOSIP_CALL_CLOSED) {
 						TspTrace("EXOSIP_CALL_CLOSED received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
-						this->ongoingcall = 0;
-						counter = 0;
-						if ( this->lineEvent != 0 ) {
-							TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
-							this->lineEvent( this->htLine, this->htCall,
-								LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
-								0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
-						}
-						if ( this->lineEvent != 0 ) {
-							TSPTRACE("sending LINECALLSTATE_IDLE ...");
-							this->lineEvent( this->htLine, this->htCall,
-								LINE_CALLSTATE, LINECALLSTATE_IDLE,
-								0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+						if (je->cid == this->cid ) {
+							this->ongoingcall = 0;
+							counter = 0;
+							if ( this->lineEvent != 0 ) {
+								TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
+								this->lineEvent( this->htLine, this->htCall,
+									LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
+									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+							}
+							if ( this->lineEvent != 0 ) {
+								TSPTRACE("sending LINECALLSTATE_IDLE ...");
+								this->lineEvent( this->htLine, this->htCall,
+									LINE_CALLSTATE, LINECALLSTATE_IDLE,
+									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+							}
 						}
 						break;
 					}
 					if (je->type == EXOSIP_CALL_RELEASED) {
 						TspTrace("EXOSIP_CALL_RELEASED received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
-						this->ongoingcall = 0;
-						counter = 0;
-						if ( this->lineEvent != 0 ) {
-							TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
-							this->lineEvent( this->htLine, this->htCall,
-								LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
-								0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
-						}
-						if ( this->lineEvent != 0 ) {
-							TSPTRACE("sending LINECALLSTATE_IDLE ...");
-							this->lineEvent( this->htLine, this->htCall,
-								LINE_CALLSTATE, LINECALLSTATE_IDLE,
-								0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+						if (je->cid == this->cid ) {
+							this->ongoingcall = 0;
+							counter = 0;
+							if ( this->lineEvent != 0 ) {
+								TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
+								this->lineEvent( this->htLine, this->htCall,
+									LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
+									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+							}
+							if ( this->lineEvent != 0 ) {
+								TSPTRACE("sending LINECALLSTATE_IDLE ...");
+								this->lineEvent( this->htLine, this->htCall,
+									LINE_CALLSTATE, LINECALLSTATE_IDLE,
+									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+							}
 						}
 						break;
 					}
@@ -269,29 +277,33 @@ DWORD tapiAstManager::processMessages(void)
 				if (je != NULL) {
 					if (je->type == EXOSIP_CALL_CLOSED) {
 						TspTrace("EXOSIP_CALL_CLOSED received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
-						this->ongoingcall = 0;
-						if ( this->lineEvent != 0 ) {
-							TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
-							this->lineEvent( this->htLine, this->htCall,
-								LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
-								0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
-						}
-						if ( this->lineEvent != 0 ) {
-							TSPTRACE("sending LINECALLSTATE_IDLE ...");
-							this->lineEvent( this->htLine, this->htCall,
-								LINE_CALLSTATE, LINECALLSTATE_IDLE,
-								0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+						if (je->cid == this->cid ) {
+							this->ongoingcall = 0;
+							if ( this->lineEvent != 0 ) {
+								TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
+								this->lineEvent( this->htLine, this->htCall,
+									LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
+									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+							}
+							if ( this->lineEvent != 0 ) {
+								TSPTRACE("sending LINECALLSTATE_IDLE ...");
+								this->lineEvent( this->htLine, this->htCall,
+									LINE_CALLSTATE, LINECALLSTATE_IDLE,
+									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+							}
 						}
 						break;
 					}
 					if (je->type == EXOSIP_CALL_RELEASED) {
 						TspTrace("EXOSIP_CALL_RELEASED received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
-						this->ongoingcall = 0;
-						if ( this->lineEvent != 0 ) {
-							TSPTRACE("sending LINECALLSTATE_IDLE ...");
-							this->lineEvent( this->htLine, this->htCall,
-								LINE_CALLSTATE, LINECALLSTATE_IDLE,
-								0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+						if (je->cid == this->cid ) {
+							this->ongoingcall = 0;
+							if ( this->lineEvent != 0 ) {
+								TSPTRACE("sending LINECALLSTATE_IDLE ...");
+								this->lineEvent( this->htLine, this->htCall,
+									LINE_CALLSTATE, LINECALLSTATE_IDLE,
+									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+							}
 						}
 						break;
 					}
@@ -304,7 +316,7 @@ DWORD tapiAstManager::processMessages(void)
 							break;
 						}
 						// compare NOTIFY did with previous did
-						if (je->did != this->did) {
+						if ( (je->did != this->did) || (je->cid != this->cid) ) {
 							eXosip_lock();
 							TspTrace("NOTIFY does not match the INVITE/REFER dialog ... 481");
 							if (0 != eXosip_call_send_answer(je->tid, 481, NULL)) {
