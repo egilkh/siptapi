@@ -121,7 +121,7 @@ class astManager
 		DWORD originate(std::string destAddress);
 		// Call this function to drop whatever call has been originated by this class. 
 		// This is still to be completed.
-		void dropChannel(std::string channel);
+		void dropChannel();
 		// This function will wait for a time for the a messgage from Asterisk
 		// te end of a message is marked by a \r\n\r\n
 		astEvent* waitForMessage(void);

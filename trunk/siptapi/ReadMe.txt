@@ -2,6 +2,7 @@ SIPTAPI README
 
 v. 0.2.8
 - outbound proxy is now always a loose-router, if ;lr parameter is not present it will be added internally
+- fix bug: wait maximum 25seconds for NOTIFY, then send BYE anyway
 
 v. 0.2.7 (not released)
 - fix bug: proper handling of 401 response

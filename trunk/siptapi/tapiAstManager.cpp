@@ -81,6 +81,7 @@ DWORD tapiAstManager::processMessages(void)
 		}
 
 //		TspTrace("this->ongoingcall before switch() = '%i'",this->ongoingcall);
+		std::string referto;
 		switch(this->ongoingcall) {
 			case 0:
 				TspTrace("No ongoing call, doing nothing...\n");
@@ -241,7 +242,9 @@ DWORD tapiAstManager::processMessages(void)
 				osip_message_t *refer;
 				eXosip_lock();
 				TspTrace("building REFER ...");
-				i = eXosip_call_build_refer(this->did, this->to.data(), &refer);
+				referto = std::string("\"foo bar\" <") + this->to + std::string(">");
+				i = eXosip_call_build_refer(this->did, referto.data(), &refer);
+				//i = eXosip_call_build_refer(this->did, this->to.data(), &refer);
 				if (i != 0) {
 					TspTrace("eXosip_call_build_refer failed...");
 					eXosip_unlock();
@@ -263,6 +266,7 @@ DWORD tapiAstManager::processMessages(void)
 				}
 				TspTrace("eXosip_call_send_request succeeded...");
 				this->ongoingcall = 3;
+				counter = 0;
 				eXosip_unlock();
 				TspTrace("...sending REFER done ...");
 				if ( this->lineEvent != 0 ) {
@@ -274,6 +278,12 @@ DWORD tapiAstManager::processMessages(void)
 				break;
 			case 3:
 				TspTrace("Ongoing call = 3");
+				counter ++;
+				TspTrace("counter = '%i'", counter);
+				if (counter > 500) { //wait 500 cycles (25 sec) for NOTIFY, then send BYE anyway
+					this->dropChannel();
+					break;
+				}
 				if (je != NULL) {
 					if (je->type == EXOSIP_CALL_CLOSED) {
 						TspTrace("EXOSIP_CALL_CLOSED received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
@@ -640,7 +650,7 @@ DWORD tapiAstManager::dropCall(HDRVCALL tspiID)
 	if ( ( ourCall = this->findCall(tspiID)) != NULL )
 	{
 		TspTrace("call found, drop channel...");
-		this->dropChannel(ourCall->getAstChannelID());
+		this->dropChannel();
 	}
 
 	return 0;

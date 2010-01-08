@@ -714,7 +714,7 @@ astEvent* astManager::waitForMessage(void)
 //
 // Call this function to drop whatever call has been originated by this class. 
 // This is still to be completed.
-void astManager::dropChannel(std::string channel)
+void astManager::dropChannel()
 {
 	std::string command;
 
@@ -741,22 +741,10 @@ void astManager::dropChannel(std::string channel)
 		this->lineEvent( this->htLine, this->htCall,
 			LINE_CALLSTATE, LINECALLSTATE_IDLE,
 			0, 0 );
-		this->ongoingcall = 0;
 	}
-
-
-/*	command = "Action: Hangup\r\n";
-	//send the command
-	this->sendCommand(command);
-
-	command = "Channel: ";
-	command += channel;
-	command += "\r\n\r\n";
-
-	this->sendCommand(command);
-	*/
+	this->ongoingcall = 0;
 }
-////////////////////////////////////////////////////////////////////////////////
+
 
 
 
