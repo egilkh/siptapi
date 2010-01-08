@@ -81,7 +81,7 @@ DWORD tapiAstManager::processMessages(void)
 		}
 
 //		TspTrace("this->ongoingcall before switch() = '%i'",this->ongoingcall);
-		std::string referto;
+//		std::string referto;
 		switch(this->ongoingcall) {
 			case 0:
 				TspTrace("No ongoing call, doing nothing...\n");
@@ -242,9 +242,9 @@ DWORD tapiAstManager::processMessages(void)
 				osip_message_t *refer;
 				eXosip_lock();
 				TspTrace("building REFER ...");
-				referto = std::string("\"foo bar\" <") + this->to + std::string(">");
-				i = eXosip_call_build_refer(this->did, referto.data(), &refer);
-				//i = eXosip_call_build_refer(this->did, this->to.data(), &refer);
+//				referto = std::string("\"foo bar\" <") + this->to + std::string(">");
+//				i = eXosip_call_build_refer(this->did, referto.data(), &refer);
+				i = eXosip_call_build_refer(this->did, this->to.data(), &refer);
 				if (i != 0) {
 					TspTrace("eXosip_call_build_refer failed...");
 					eXosip_unlock();
