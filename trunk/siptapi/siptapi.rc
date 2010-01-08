@@ -88,7 +88,7 @@ BEGIN
     LTEXT           "For help and information got to www.ipcom.at",
                     IDC_STATIC,15,221,161,8
     GROUPBOX        "",IDC_STATIC,7,183,224,47
-    LTEXT           "v_0.2.7",IDC_STATIC,197,219,26,8
+    LTEXT           "v_0.2.8",IDC_STATIC,197,219,26,8
     LTEXT           "User's extension (optional)",IDC_STATIC,15,135,88,10
     EDITTEXT        IDC_USER_EXTEN,110,132,121,13,ES_AUTOHSCROLL
 END
@@ -127,8 +127,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,2,7,0
- PRODUCTVERSION 0,2,7,0
+ FILEVERSION 0,2,8,0
+ PRODUCTVERSION 0,2,8,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -146,13 +146,13 @@ BEGIN
             VALUE "Comments", "SIPTAPI - a TAPI service provider for the SIP"
             VALUE "CompanyName", "enum.at"
             VALUE "FileDescription", "SIPTAPI Service Provider 0.2.7"
-            VALUE "FileVersion", "0, 2, 7, 0"
+            VALUE "FileVersion", "0, 2, 8, 0"
             VALUE "InternalName", "siptapi"
             VALUE "LegalCopyright", "Copyright (C) 2004, 2005, 2006, 2009"
             VALUE "LegalTrademarks", "Please see the copyright notice for further information"
             VALUE "OriginalFilename", "siptapi.tsp"
             VALUE "ProductName", "siptapi"
-            VALUE "ProductVersion", "0, 2, 7, 0"
+            VALUE "ProductVersion", "0, 2, 8, 0"
         END
     END
     BLOCK "VarFileInfo"

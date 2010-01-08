@@ -1,5 +1,13 @@
 SIPTAPI README
 
+v. 0.2.8
+- outbound proxy is now always a loose-router, if ;lr parameter is not present it will be added internally
+
+v. 0.2.7 (not released)
+- fix bug: proper handling of 401 response
+- new (faster) handling of line close/drop
+- successfully tested against Telinta hosted platform (http://www.telinta.com)
+
 v. 0.2.6
 - fix bug: works now also with Lotus Organizer
 - fix bug: better error handling for SIP errors (still todo: async)

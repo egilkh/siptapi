@@ -367,9 +367,15 @@ DWORD astManager::originate(std::string destAddress)
 //	route       = ("<sip:") + this->host  + (";lr>");
 //	route       = ("\0");
 	if (this->host == "") {
-		route   = ("\0");
+		route   = ("");
 	} else {
-		route   = ("<sip:") + this->host  + (">");
+		if (this->host.find(";lr") == std::string::npos) {
+			// not found
+			route   = ("<sip:") + this->host  + (";lr>");
+		} else {
+			// found
+			route   = ("<sip:") + this->host  + (">");
+		}
 	}
 
 	TspTrace("From:     this->from.data()  ='%s'",this->from.data());
