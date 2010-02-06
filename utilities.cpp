@@ -290,7 +290,7 @@ void TspTrace(LPCSTR pszFormat, ...)
 
 #define _DEBUGTOFILE
 #ifdef _DEBUGTOFILE
-    HANDLE  hFile = CreateFile("c:\\wavetsp.out", GENERIC_WRITE,
+    HANDLE  hFile = CreateFile("c:\\siptapi_0.2.log", GENERIC_WRITE,
                                0, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
     SetFilePointer(hFile, 0, 0, FILE_END);
     //DWORD   err = GetLastError();

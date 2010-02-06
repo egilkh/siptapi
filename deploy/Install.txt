@@ -1,5 +1,7 @@
 A short SIPTAPI installation tutorial .....
 
+(Note: For better debugging the binaries are usually built 
+in "Debug" mode, and thus write a log file to c:\siptapi_0.2.log)
 
 On 32bit Windows
 =================
