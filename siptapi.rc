@@ -65,8 +65,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 //
 
 IDD_DIALOG1 DIALOGEX 0, 0, 238, 237
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
-    WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "SIPTAPI Configuration"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
@@ -81,12 +80,10 @@ BEGIN
     EDITTEXT        IDC_UCHAN,93,20,138,13,ES_AUTOHSCROLL
     PUSHBUTTON      "Apply",IDC_APPLY,93,195,50,14
     GROUPBOX        "User Information",IDC_STATIC,7,66,224,93
-    LTEXT           "SIPTAPI: A TAPI Service Provider based on SIP",
-                    IDC_STATIC,15,214,201,8
+    LTEXT           "SIPTAPI: A TAPI Service Provider based on SIP",IDC_STATIC,15,214,201,8
     LTEXT           "SIP Domain",IDC_STATIC,15,23,45,10
     GROUPBOX        "SIP Configuration",IDC_STATIC,7,3,224,58
-    LTEXT           "For help and information got to www.ipcom.at",
-                    IDC_STATIC,15,221,161,8
+    LTEXT           "For help and information got to www.ipcom.at",IDC_STATIC,15,221,161,8
     GROUPBOX        "",IDC_STATIC,7,183,224,47
     LTEXT           "v_0.2.8",IDC_STATIC,197,219,26,8
     LTEXT           "User's extension (optional)",IDC_STATIC,15,135,88,10
@@ -145,7 +142,7 @@ BEGIN
         BEGIN
             VALUE "Comments", "SIPTAPI - a TAPI service provider for the SIP"
             VALUE "CompanyName", "enum.at"
-            VALUE "FileDescription", "SIPTAPI Service Provider 0.2.7"
+            VALUE "FileDescription", "SIPTAPI Service Provider 0.2.8"
             VALUE "FileVersion", "0, 2, 8, 0"
             VALUE "InternalName", "siptapi"
             VALUE "LegalCopyright", "Copyright (C) 2004, 2005, 2006, 2009"
