@@ -1,26 +1,19 @@
-This is SIPTAPI, developed by Klaus Darilion (enum.at).
+SIPTAPI, developed by Klaus Darilion (www.ipcom.at)
+---------------------------------------------------
 
-The work is based on asttapi, a TAPI driver which connects to Asterisk via the manager interface (a telnet connection into Asterisk).
+SIPTAPI is based on asttapi.
 
-I removed all the asterisk/telnet related stuff and replaced it with eXosip2.
 
 Build instructions (windows xp, visual studio.net):
 - Get the osip2 and eXosip2 sources and build them:
-  If you use it with Cisco phones, you have to 
-  build with option: -DCISCO_BUG 
-  http://www.atosc.org/pipermail/public/osip/2005-April/005130.html
-  I used an early version of exosip2. Maybe the API has changed a little bit, Then you will have to update the exosip function calls in siptapi.
 - Open the siptapi project: asttapi.sln
 - Specify the location of the osip/exosip header fiels and libraries in the siptapi project
 - build the siptapi
 
-- to build 64 bit version you have to additionally:
+- to build 64 bit version you further have to:
   - build osip/eXosip in 64bit
   - use Visual Studio >= 2005
-  - delete siptapi.vcproj
-  - rename siptapi.vcproj-vs2005 to siptapi.vcproj
   - open siptapi-vs2005.sln
-
 
 Installation:
 - copy the siptapi.tsp file into \windows\system32\

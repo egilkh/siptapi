@@ -18,6 +18,7 @@
 #define IDC_CALLERID                    1011
 #define IDC_CHECK1                      1012
 #define IDC_CALLERIDEN                  1012
+#define IDC_CHECK_REVERSEMODE           1012
 #define IDC_ICHAN                       1013
 #define IDC_CALLERIDEN2                 1014
 #define IDC_ICHREGEX                    1014

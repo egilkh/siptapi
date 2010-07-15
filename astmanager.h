@@ -89,6 +89,10 @@ class astManager
 		// class destructor
 		~astManager();
 
+		int reverseMode;
+		DWORD dwCallState;
+		DWORD dwCallStateMode;
+
 		DWORD setLineEvent(LINEEVENT callBack);
 		DWORD setTapiLine(HTAPILINE line);
 		HTAPILINE getTapiLine(void);
