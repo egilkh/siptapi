@@ -436,6 +436,7 @@ LONG TSPIAPI TSPI_lineOpen(
 
     tapiAstManager *ourConnection;
     ourConnection = new tapiAstManager;
+	DWORD tempInt;
 
     if ( ourConnection )
     {
@@ -485,7 +486,19 @@ LONG TSPIAPI TSPI_lineOpen(
 			return EPILOG(LINEERR_CALLUNAVAIL);
 		}
         ourConnection->setOriginator(strData);
-		
+
+		if ( false == readConfigInt("reversemode", tempInt) ) {
+			TspTrace("Info: failed reading reversemode, use 'off' ...");
+	        ourConnection->reverseMode = 0;
+		} else {
+	        ourConnection->reverseMode = tempInt;
+		}
+		if (tempInt) {
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X reverse-mode activated\n", dwDeviceID);
+		} else {
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X reverse-mode  deactivated\n", dwDeviceID);
+		}
+
 		// initialize SIP stack
 		if ( ourConnection->astConnect() == 0)
 		{
@@ -828,7 +841,7 @@ LONG TSPIAPI TSPI_lineGetCallStatus(
     HDRVCALL            hdCall,
     LPLINECALLSTATUS    pls
     )
-{
+{ 
 	//TODO finish this offf....
 	BEGIN_PARAM_TABLE("TSPI_lineGetCallStatus")
 		DWORD_IN_ENTRY(hdCall)
@@ -850,9 +863,6 @@ LONG TSPIAPI TSPI_lineGetCallStatus(
 	pls->dwUsedSize = sizeof(LINECALLSTATUS);
 	pls->dwCallStateMode = 0;
 
-	TSPTRACE("TSPI_lineGetCallStatus: error: pls->dwTotalSize  = %d\r\n",pls->dwTotalSize);
-	TSPTRACE("TSPI_lineGetCallStatus: error: pls->dwNeededSize = %d\r\n",pls->dwNeededSize);
-
 
 	// TAPI Service PRovider MUST NOT write this member!
 	// http://msdn2.microsoft.com/en-us/library/ms725567.aspx
@@ -860,7 +870,7 @@ LONG TSPIAPI TSPI_lineGetCallStatus(
 	//LINECALLPRIVILEGE_NONE 
 	//LINECALLPRIVILEGE_OWNER 
 
-	pls->dwCallFeatures = LINECALLFEATURE_ACCEPT;
+	pls->dwCallFeatures = LINECALLFEATURE_DROP;
 	//and more...
 
 	lineMut.Lock();
@@ -873,6 +883,9 @@ LONG TSPIAPI TSPI_lineGetCallStatus(
 		{
 			TSPTRACE("Found call - getting state\r\n");
 			found = 1;
+			// richtiger callstate geht nicht, weil im astTspGlue das nicht drinnen steht!
+			//pls->dwCallState = ourCall->dwCallState;
+			//pls->dwCallStateMode = ourCall->dwCallStateMode;
 			pls->dwCallState = ourCall->getState();
 				//LINECALLSTATE_OFFERING;
 				//LINECALLSTATE_CONNECTED;
@@ -1275,6 +1288,9 @@ BOOL CALLBACK ConfigDlgProc(
 		readConfigString("uchan", temp);
 		SetDlgItemText(hwnd, IDC_UCHAN, temp.c_str());
 
+		readConfigInt("reversemode", tempInt);
+		CheckDlgButton(hwnd, IDC_CHECK_REVERSEMODE, tempInt);
+
 		//CallerID
 		readConfigString("callerid", temp);
 		SetDlgItemText(hwnd, IDC_CALLERID, temp.c_str() );
@@ -1377,6 +1393,9 @@ BOOL CALLBACK ConfigDlgProc(
 
 			GetDlgItemText(hwnd, IDC_UCHAN, szTemp, sizeof(szTemp));
 			storeConfigString("uchan", szTemp);
+
+			tempInt = IsDlgButtonChecked(hwnd, IDC_CHECK_REVERSEMODE);
+			storeConfigInt("reversemode", tempInt);
 
 			//wether we origintae by call the dial application or 
 			//by dropping a user into a context

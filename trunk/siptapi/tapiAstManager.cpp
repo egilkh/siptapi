@@ -36,6 +36,89 @@
 
 Mutex tspMut;
 
+void dump_event(eXosip_event_t *je) {
+	char *type;
+	TspTrace("Event '%s' received...\n",je->textinfo);
+	switch (je->type) {
+		case EXOSIP_REGISTRATION_NEW: type="EXOSIP_REGISTRATION_NEW  < announce new registration."; break;
+		case EXOSIP_REGISTRATION_SUCCESS: type="EXOSIP_REGISTRATION_SUCCESS  < user is successfully registred."; break;
+		case EXOSIP_REGISTRATION_FAILURE: type="EXOSIP_REGISTRATION_FAILURE  < user is not registred."; break;
+		case EXOSIP_REGISTRATION_REFRESHED: type="EXOSIP_REGISTRATION_REFRESHED  < registration has been refreshed."; break;
+		case EXOSIP_REGISTRATION_TERMINATED: type="EXOSIP_REGISTRATION_TERMINATED  < UA is not registred any more."; break;
+		case EXOSIP_CALL_INVITE: type="EXOSIP_CALL_INVITE  < announce a new call"; break;
+		case EXOSIP_CALL_REINVITE: type="EXOSIP_CALL_REINVITE  < announce a new INVITE within call"; break;
+		case EXOSIP_CALL_NOANSWER: type="EXOSIP_CALL_NOANSWER  < announce no answer within the timeout"; break;
+		case EXOSIP_CALL_PROCEEDING: type="EXOSIP_CALL_PROCEEDING  < announce processing by a remote app"; break;
+		case EXOSIP_CALL_RINGING: type="EXOSIP_CALL_RINGING  < announce ringback"; break;
+		case EXOSIP_CALL_ANSWERED: type="EXOSIP_CALL_ANSWERED  < announce start of call"; break;
+		case EXOSIP_CALL_REDIRECTED: type="EXOSIP_CALL_REDIRECTED  < announce a redirection"; break;
+		case EXOSIP_CALL_REQUESTFAILURE: type="EXOSIP_CALL_REQUESTFAILURE  < announce a request failure"; break;
+		case EXOSIP_CALL_SERVERFAILURE: type="EXOSIP_CALL_SERVERFAILURE  < announce a server failure"; break;
+		case EXOSIP_CALL_GLOBALFAILURE: type="EXOSIP_CALL_GLOBALFAILURE  < announce a global failure"; break;
+		case EXOSIP_CALL_ACK: type="EXOSIP_CALL_ACK  < ACK received for 200ok to INVITE"; break;
+		case EXOSIP_CALL_CANCELLED: type="EXOSIP_CALL_CANCELLED  < announce that call has been cancelled"; break;
+		case EXOSIP_CALL_TIMEOUT: type="EXOSIP_CALL_TIMEOUT  < announce that call has failed"; break;
+		case EXOSIP_CALL_MESSAGE_NEW: type="EXOSIP_CALL_MESSAGE_NEW  < announce new incoming request."; break;
+		case EXOSIP_CALL_MESSAGE_PROCEEDING: type="EXOSIP_CALL_MESSAGE_PROCEEDING  < announce a 1xx for request."; break;
+		case EXOSIP_CALL_MESSAGE_ANSWERED: type="EXOSIP_CALL_MESSAGE_ANSWERED  < announce a 200ok"; break;
+		case EXOSIP_CALL_MESSAGE_REDIRECTED: type="EXOSIP_CALL_MESSAGE_REDIRECTED  < announce a failure."; break;
+		case EXOSIP_CALL_MESSAGE_REQUESTFAILURE: type="EXOSIP_CALL_MESSAGE_REQUESTFAILURE  < announce a failure."; break;
+		case EXOSIP_CALL_MESSAGE_SERVERFAILURE: type="EXOSIP_CALL_MESSAGE_SERVERFAILURE  < announce a failure."; break;
+		case EXOSIP_CALL_MESSAGE_GLOBALFAILURE: type="EXOSIP_CALL_MESSAGE_GLOBALFAILURE  < announce a failure."; break;
+		case EXOSIP_CALL_CLOSED: type="EXOSIP_CALL_CLOSED  < a BYE was received for this call"; break;
+		case EXOSIP_CALL_RELEASED: type="EXOSIP_CALL_RELEASED  < call context is cleared."; break;
+		case EXOSIP_MESSAGE_NEW: type="EXOSIP_MESSAGE_NEW  < announce new incoming request."; break;
+		case EXOSIP_MESSAGE_PROCEEDING: type="EXOSIP_MESSAGE_PROCEEDING  < announce a 1xx for request."; break;
+		case EXOSIP_MESSAGE_ANSWERED: type="EXOSIP_MESSAGE_ANSWERED  < announce a 200ok"; break;
+		case EXOSIP_MESSAGE_REDIRECTED: type="EXOSIP_MESSAGE_REDIRECTED  < announce a failure."; break;
+		case EXOSIP_MESSAGE_REQUESTFAILURE: type="EXOSIP_MESSAGE_REQUESTFAILURE  < announce a failure."; break;
+		case EXOSIP_MESSAGE_SERVERFAILURE: type="EXOSIP_MESSAGE_SERVERFAILURE  < announce a failure."; break;
+		case EXOSIP_MESSAGE_GLOBALFAILURE: type="EXOSIP_MESSAGE_GLOBALFAILURE  < announce a failure."; break;
+		case EXOSIP_SUBSCRIPTION_UPDATE: type="EXOSIP_SUBSCRIPTION_UPDATE  < announce incoming SUBSCRIBE."; break;
+		case EXOSIP_SUBSCRIPTION_CLOSED: type="EXOSIP_SUBSCRIPTION_CLOSED  < announce end of subscription."; break;
+		case EXOSIP_SUBSCRIPTION_NOANSWER: type="EXOSIP_SUBSCRIPTION_NOANSWER  < announce no answer"; break;
+		case EXOSIP_SUBSCRIPTION_PROCEEDING: type="EXOSIP_SUBSCRIPTION_PROCEEDING  < announce a 1xx"; break;
+		case EXOSIP_SUBSCRIPTION_ANSWERED: type="EXOSIP_SUBSCRIPTION_ANSWERED  < announce a 200ok"; break;
+		case EXOSIP_SUBSCRIPTION_REDIRECTED: type="EXOSIP_SUBSCRIPTION_REDIRECTED  < announce a redirection"; break;
+		case EXOSIP_SUBSCRIPTION_REQUESTFAILURE: type="EXOSIP_SUBSCRIPTION_REQUESTFAILURE  < announce a request failure"; break;
+		case EXOSIP_SUBSCRIPTION_SERVERFAILURE: type="EXOSIP_SUBSCRIPTION_SERVERFAILURE  < announce a server failure"; break;
+		case EXOSIP_SUBSCRIPTION_GLOBALFAILURE: type="EXOSIP_SUBSCRIPTION_GLOBALFAILURE  < announce a global failure"; break;
+		case EXOSIP_SUBSCRIPTION_NOTIFY: type="EXOSIP_SUBSCRIPTION_NOTIFY  < announce new NOTIFY request"; break;
+		case EXOSIP_SUBSCRIPTION_RELEASED: type="EXOSIP_SUBSCRIPTION_RELEASED  < call context is cleared."; break;
+		case EXOSIP_IN_SUBSCRIPTION_NEW: type="EXOSIP_IN_SUBSCRIPTION_NEW  < announce new incoming SUBSCRIBE."; break;
+		case EXOSIP_IN_SUBSCRIPTION_RELEASED: type="EXOSIP_IN_SUBSCRIPTION_RELEASED  < announce end of subscription."; break;
+		case EXOSIP_NOTIFICATION_NOANSWER: type="EXOSIP_NOTIFICATION_NOANSWER  < announce no answer"; break;
+		case EXOSIP_NOTIFICATION_PROCEEDING: type="EXOSIP_NOTIFICATION_PROCEEDING  < announce a 1xx"; break;
+		case EXOSIP_NOTIFICATION_ANSWERED: type="EXOSIP_NOTIFICATION_ANSWERED  < announce a 200ok"; break;
+		case EXOSIP_NOTIFICATION_REDIRECTED: type="EXOSIP_NOTIFICATION_REDIRECTED  < announce a redirection"; break;
+		case EXOSIP_NOTIFICATION_REQUESTFAILURE: type="EXOSIP_NOTIFICATION_REQUESTFAILURE  < announce a request failure"; break;
+		case EXOSIP_NOTIFICATION_SERVERFAILURE: type="EXOSIP_NOTIFICATION_SERVERFAILURE  < announce a server failure"; break;
+		case EXOSIP_NOTIFICATION_GLOBALFAILURE: type="EXOSIP_NOTIFICATION_GLOBALFAILURE  < announce a global failure"; break;
+		case EXOSIP_EVENT_COUNT: type="EXOSIP_EVENT_COUNT  < MAX number of events"; break;
+		default: type="unknown type - update tapiAstMAnager.cpp:dump_event()";
+	}
+	TspTrace("dump_event: Event type = '%s'...\n",type);
+	TspTrace("dump_event: event cid = %d\n",je->cid);
+	TspTrace("dump_event: event did = %d\n",je->did);
+	TspTrace("dump_event: event tid = %d\n",je->tid);
+	TspTrace("dump_event: event rid = %d\n",je->rid);
+
+	if (je->request != NULL) {
+		TspTrace("dump_event: request dumping ... \n");
+		TspTrace("dump_event: event->request: method = '%s'\n",je->request->sip_method);
+		TspTrace("dump_event: request dumping ... done\n");
+	}
+
+	if (je->response != NULL) {
+		TspTrace("dump_event: response dumping ... \n");
+		TspTrace("dump_event: event->response: status code = '%d'\n",je->response->status_code);
+		TspTrace("dump_event: response dumping ... done\n");
+	}
+
+	TspTrace("dump_event: ... done\n");
+
+}
+
 tapiAstManager::tapiAstManager(void)
 {
 	this->lineEvent = 0;
@@ -74,10 +157,12 @@ DWORD tapiAstManager::processMessages(void)
         //TspTrace("eXosip_event_wait ended",je->textinfo);
 
 		if (je != NULL) {
-            TspTrace("Event '%s' received...",je->textinfo);
+			TspTrace("Event '%s' received...",je->textinfo);
 			if (je->response != NULL) {
 				TspTrace("response = '%i'",je->response->status_code);
 			}
+			// log event data
+			dump_event(je);
 		}
 
 //		TspTrace("this->ongoingcall before switch() = '%i'",this->ongoingcall);
@@ -107,17 +192,18 @@ DWORD tapiAstManager::processMessages(void)
 						}
 						break;
 					}
-					if (je->type == EXOSIP_CALL_REQUESTFAILURE) {
+					if ((je->type == EXOSIP_CALL_REQUESTFAILURE) || 
+						(je->type == EXOSIP_CALL_SERVERFAILURE) || 
+						(je->type == EXOSIP_CALL_GLOBALFAILURE) ) {
 						TspTrace("EXOSIP_CALL_REQUESTFAILURE received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
 						if (je->response != NULL) {
 							if ( (je->response->status_code == 487) && (je->cid == this->cid ) ) {
 								TspTrace("Call successful canceled ...");
 								this->ongoingcall = 0;
 								if ( this->lineEvent != 0 ) {
-									TSPTRACE("sending LINECALLSTATE_IDLE ...");
+									TSPTRACE("sending LINECALLSTATE_IDLE/LINEDISCONNECTMODE_CANCELLED ...");
 									this->lineEvent( this->htLine, this->htCall,
-										LINE_CALLSTATE, LINECALLSTATE_IDLE,
-										0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+										LINE_CALLSTATE, LINECALLSTATE_IDLE, LINEDISCONNECTMODE_CANCELLED, 0);
 								}
 								break;
 							}
@@ -128,17 +214,59 @@ DWORD tapiAstManager::processMessages(void)
 							this->ongoingcall = 0;
 							counter = 0;
 							if ( this->lineEvent != 0 ) {
-								TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
-								this->lineEvent( this->htLine, this->htCall,
-									LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
-									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+								switch (je->response->status_code) {
+								case 403:
+									TSPTRACE("403 --> sending LINECALLSTATE_DISCONNECTED ...");
+									dwCallState=LINECALLSTATE_DISCONNECTED;
+									dwCallStateMode=0;
+									break;
+								case 404:
+									TSPTRACE("404 --> sending LINECALLSTATE_DISCONNECTED/LINEDISCONNECTMODE_BADADDRESS ...");
+									dwCallState=LINECALLSTATE_DISCONNECTED;
+									dwCallStateMode=LINEDISCONNECTMODE_BADADDRESS;
+									break;
+								case 408:
+									TSPTRACE("408 --> sending LINECALLSTATE_DISCONNECTED/LINEDISCONNECTMODE_NOANSWER ...");
+									dwCallState=LINECALLSTATE_DISCONNECTED;
+									dwCallStateMode=LINEDISCONNECTMODE_NOANSWER;
+									break;
+								case 486:
+									TSPTRACE("486 --> sending LINECALLSTATE_DISCONNECTED/LINECALLSTATE_BUSY ...");
+									dwCallState=LINECALLSTATE_DISCONNECTED;
+									dwCallStateMode=LINECALLSTATE_BUSY;
+									break;
+								case 503:
+									TSPTRACE("503 --> sending LINECALLSTATE_DISCONNECTED/LINEDISCONNECTMODE_CONGESTION ...");
+									dwCallState=LINECALLSTATE_DISCONNECTED;
+									dwCallStateMode=LINEDISCONNECTMODE_CONGESTION;
+									break;
+								case 603:
+									TSPTRACE("603 --> sending LINECALLSTATE_DISCONNECTED/LINEDISCONNECTMODE_REJECT ...");
+									dwCallState=LINECALLSTATE_DISCONNECTED;
+									dwCallStateMode=LINEDISCONNECTMODE_REJECT;
+									break;
+								default:
+									TSPTRACE("default --> sending LINECALLSTATE_DISCONNECTED ...");
+									dwCallState=LINECALLSTATE_DISCONNECTED;
+									dwCallStateMode=0;
+									break;
+								}
+								this->lineEvent( htLine, htCall, LINE_CALLSTATE, dwCallState, dwCallStateMode, 0 );
 							}
-							if ( this->lineEvent != 0 ) {
-								TSPTRACE("sending LINECALLSTATE_IDLE ...");
-								this->lineEvent( this->htLine, this->htCall,
-									LINE_CALLSTATE, LINECALLSTATE_IDLE,
-									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
-							}
+
+
+							//if ( this->lineEvent != 0 ) {
+							//	TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
+							//	this->lineEvent( this->htLine, this->htCall,
+							//		LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
+							//		0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+							//}
+							//if ( this->lineEvent != 0 ) {
+							//	TSPTRACE("sending LINECALLSTATE_IDLE ...");
+							//	this->lineEvent( this->htLine, this->htCall,
+							//		LINE_CALLSTATE, LINECALLSTATE_IDLE,
+							//		0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+							//}
 							break;
 						}
 					}
@@ -161,6 +289,8 @@ DWORD tapiAstManager::processMessages(void)
 							this->did = je->did;
 							if ( this->lineEvent != 0 ) {
 								TSPTRACE("sending LINECALLSTATE_CONNECTED ...");
+								dwCallState=LINECALLSTATE_CONNECTED;
+								dwCallStateMode=0;
 								this->lineEvent( this->htLine, this->htCall,
 									LINE_CALLSTATE, LINECALLSTATE_CONNECTED,
 									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
@@ -201,12 +331,16 @@ DWORD tapiAstManager::processMessages(void)
 							counter = 0;
 							if ( this->lineEvent != 0 ) {
 								TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
+								dwCallState=LINECALLSTATE_DISCONNECTED;
+								dwCallStateMode=0;
 								this->lineEvent( this->htLine, this->htCall,
 									LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
 									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
 							}
 							if ( this->lineEvent != 0 ) {
 								TSPTRACE("sending LINECALLSTATE_IDLE ...");
+								dwCallState=LINECALLSTATE_IDLE;
+								dwCallStateMode=0;
 								this->lineEvent( this->htLine, this->htCall,
 									LINE_CALLSTATE, LINECALLSTATE_IDLE,
 									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
@@ -221,12 +355,16 @@ DWORD tapiAstManager::processMessages(void)
 							counter = 0;
 							if ( this->lineEvent != 0 ) {
 								TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
+								dwCallState=LINECALLSTATE_DISCONNECTED;
+								dwCallStateMode=0;
 								this->lineEvent( this->htLine, this->htCall,
 									LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
 									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
 							}
 							if ( this->lineEvent != 0 ) {
 								TSPTRACE("sending LINECALLSTATE_IDLE ...");
+								dwCallState=LINECALLSTATE_IDLE;
+								dwCallStateMode=0;
 								this->lineEvent( this->htLine, this->htCall,
 									LINE_CALLSTATE, LINECALLSTATE_IDLE,
 									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
@@ -271,6 +409,8 @@ DWORD tapiAstManager::processMessages(void)
 				TspTrace("...sending REFER done ...");
 				if ( this->lineEvent != 0 ) {
 					TSPTRACE("sending LINECALLSTATE_ONHOLDPENDTRANSFER ...");
+					dwCallState=LINECALLSTATE_ONHOLDPENDTRANSFER;
+					dwCallStateMode=0;
 					this->lineEvent( this->htLine, this->htCall,
 						LINE_CALLSTATE, LINECALLSTATE_ONHOLDPENDTRANSFER,
 						0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
@@ -291,12 +431,16 @@ DWORD tapiAstManager::processMessages(void)
 							this->ongoingcall = 0;
 							if ( this->lineEvent != 0 ) {
 								TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
+								dwCallState=LINECALLSTATE_DISCONNECTED;
+								dwCallStateMode=0;
 								this->lineEvent( this->htLine, this->htCall,
 									LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
 									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
 							}
 							if ( this->lineEvent != 0 ) {
 								TSPTRACE("sending LINECALLSTATE_IDLE ...");
+								dwCallState=LINECALLSTATE_IDLE;
+								dwCallStateMode=0;
 								this->lineEvent( this->htLine, this->htCall,
 									LINE_CALLSTATE, LINECALLSTATE_IDLE,
 									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
@@ -310,6 +454,8 @@ DWORD tapiAstManager::processMessages(void)
 							this->ongoingcall = 0;
 							if ( this->lineEvent != 0 ) {
 								TSPTRACE("sending LINECALLSTATE_IDLE ...");
+								dwCallState=LINECALLSTATE_IDLE;
+								dwCallStateMode=0;
 								this->lineEvent( this->htLine, this->htCall,
 									LINE_CALLSTATE, LINECALLSTATE_IDLE,
 									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
@@ -363,6 +509,8 @@ DWORD tapiAstManager::processMessages(void)
 						TspTrace("eXosip_call_terminate succeeded...");
 						if ( this->lineEvent != 0 ) {
 							TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
+							dwCallState=LINECALLSTATE_DISCONNECTED;
+							dwCallStateMode=0;
 							this->lineEvent( this->htLine, this->htCall,
 								LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
 								0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);

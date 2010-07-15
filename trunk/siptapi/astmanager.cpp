@@ -50,6 +50,10 @@ astManager::astManager(void)
 
 	this->cid = 0;
 	this->did = 0;
+
+	this->reverseMode=0;
+	this->dwCallState=LINECALLSTATE_UNKNOWN;
+	this->dwCallStateMode=0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -357,6 +361,9 @@ DWORD astManager::originate(std::string destAddress)
 	}
 	TspTrace("trimmed number: %s",destAddress.data());
 
+	// from:  wir
+	// to:    das final target
+	// exten: das lokale SIP Telefon
 	this->to    = ("sip:")  + destAddress     + ("@") +  this->originator;
 	this->from  = ("sip:")  + this->user      + ("@") +  this->originator;
 	if (this->userexten == "") {
@@ -376,6 +383,13 @@ DWORD astManager::originate(std::string destAddress)
 			// found
 			route   = ("<sip:") + this->host  + (">");
 		}
+	}
+
+	if (this->reverseMode) {
+		// reuse destAddress to change refertarget and calltarget
+		destAddress = to;
+		to = exten;
+		exten = destAddress;
 	}
 
 	TspTrace("From:     this->from.data()  ='%s'",this->from.data());
