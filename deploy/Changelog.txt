@@ -7,6 +7,7 @@ v. 0.2.9
   and once the target answers, it gets refered to the user's phone.
   Note: In reverse mode you wont get any audible call progress indication (e.g. ringback, busy tone ...)
 - location of SIPTAPI settings changed (should work better with security features of Vista and Windows 7)
+- Sourceforge code repository migrated from CVS to SVN
 
 v. 0.2.8
 - outbound proxy is now always a loose-router, if ;lr parameter is not present it will be added internally
