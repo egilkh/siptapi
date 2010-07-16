@@ -36,7 +36,7 @@
 #include "utilities.h"
 
 //Utilities for the windows registry, so we can save out and read in the settings we require
-const char RegKey[] = "Software\\enum.at\\SipTapi";
+const char RegKey[] = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Telephony\\SipTapiSF";
 const HKEY WHICHKEY = HKEY_LOCAL_MACHINE;
 
 //Called once to make sure everything is in place.
@@ -45,12 +45,12 @@ bool initConfigStore(void)
 	HKEY ourKey;
 	DWORD result;
 
-	if ( ERROR_SUCCESS == RegOpenKeyEx(WHICHKEY, "Software", 0,KEY_ALL_ACCESS , &ourKey) )
+	if ( ERROR_SUCCESS == RegOpenKeyEx(WHICHKEY, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Telephony", 0,KEY_ALL_ACCESS , &ourKey) )
 	{
 		HKEY newOmniisKey;
 		RegCreateKeyEx(
 			ourKey,
-			"enum.at",
+			"SipTapiSF",
 			0,
 			NULL,
 			REG_OPTION_NON_VOLATILE,
@@ -60,21 +60,7 @@ bool initConfigStore(void)
 			&result
 			);
 
-		HKEY newAstTapiKey;
-		RegCreateKeyEx(
-			newOmniisKey,
-			"SipTapi",
-			0,
-			NULL,
-			REG_OPTION_NON_VOLATILE,
-			KEY_ALL_ACCESS,
-			NULL,
-			&newAstTapiKey,
-			&result
-			);
-
 		RegCloseKey(newOmniisKey);
-		RegCloseKey(newAstTapiKey);
 		RegCloseKey(ourKey);
 
 		return true;
