@@ -45,10 +45,13 @@ bool initConfigStore(void)
 	HKEY ourKey;
 	DWORD result;
 
-	if ( ERROR_SUCCESS == RegOpenKeyEx(WHICHKEY, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Telephony", 0,KEY_ALL_ACCESS , &ourKey) )
+	TspTrace("initConfigStore: creating Registry Path HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Telephony\\SipTapiSF  ...");
+
+	if ( ERROR_SUCCESS == RegOpenKeyEx(WHICHKEY, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Telephony", 
+										0,KEY_ALL_ACCESS , &ourKey) )
 	{
-		HKEY newOmniisKey;
-		RegCreateKeyEx(
+		HKEY newKey;
+		if ( ERROR_SUCCESS != RegCreateKeyEx(
 			ourKey,
 			"SipTapiSF",
 			0,
@@ -56,14 +59,18 @@ bool initConfigStore(void)
 			REG_OPTION_NON_VOLATILE,
 			KEY_ALL_ACCESS,
 			NULL,
-			&newOmniisKey,
+			&newKey,
 			&result
-			);
+			)) {
+			TspTrace("initConfigStore: Failed to create key HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Telephony\\SipTapiSF");
+		}
 
-		RegCloseKey(newOmniisKey);
+		RegCloseKey(newKey);
 		RegCloseKey(ourKey);
 
 		return true;
+	} else {
+		TspTrace("initConfigStore: Failed to open key HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Telephony");
 	}
 	return false;
 }
@@ -78,14 +85,14 @@ bool storeConfigString(std::string item, std::string str)
 		if ( ERROR_SUCCESS != RegSetValueEx(ourKey,item.c_str(), 0, REG_SZ,(const BYTE *)str.c_str(),str.size()) )
 		{
 			//MessageBox(0, "Failed set value", "Windows Registry error", MB_SETFOREGROUND);
-			TspTrace("Failed to set registry value");
+			TspTrace("storeConfigString: Failed to set registry value %s", item.c_str());
 			return false;
 		}
 		RegCloseKey(ourKey);
 	}
 	else
 	{
-		std::string msg = "Failed to open key: ";
+		std::string msg = "storeConfigString: Failed to open key: ";
 		msg += RegKey;
 		//MessageBox(0, msg.c_str() , "Windows Registry error", MB_SETFOREGROUND);
 		TspTrace(msg.c_str());
@@ -110,20 +117,20 @@ bool readConfigString(std::string item, std::string &str)
 		if ( ERROR_SUCCESS != RegQueryValueEx(ourKey,item.c_str(), 0, &type,(BYTE*)&tempStr[0],&length ) )
 		{
 			//MessageBox(0, "Failed to read value", "Windows Registry error", MB_SETFOREGROUND);
-			TspTrace("Failed to read value");
+			TspTrace("readConfigString: Failed to read value %s", item.c_str());
 			return false;
 		}
 		else if ( REG_SZ != type )
 		{
 			//MessageBox(0, "unexpected data type", "Windows Registry error", MB_SETFOREGROUND);
-			TspTrace("Unexpected data type");
+			TspTrace("readConfigString: Unexpected data type");
 			return false;
 		}
 		RegCloseKey(ourKey);
 	}
 	else
 	{
-		std::string msg = "Failed to open key: ";
+		std::string msg = "readConfigString: Failed to open key: ";
 		msg += RegKey;
 		//MessageBox(0, msg.c_str() , "Windows Registry error", MB_SETFOREGROUND);
 		TspTrace(msg.c_str());
@@ -146,17 +153,17 @@ bool storeConfigInt(std::string item, DWORD value)
 		if ( ERROR_SUCCESS != RegSetValueEx(ourKey,item.c_str(), 0, REG_DWORD,(const BYTE *)&value,sizeof(DWORD)) )
 		{
 			//MessageBox(0, "Failed set value", "Windows Registry error", MB_SETFOREGROUND);
-			TspTrace("Failed to set value");
+			TspTrace("storeConfigInt: Failed to set value %s", item.c_str());
 			return false;
 		}
 		RegCloseKey(ourKey);
 	}
 	else
 	{
-		std::string msg = "Failed to open key: ";
+		std::string msg = "storeConfigInt: Failed to open key: ";
 		msg += RegKey;
 		//MessageBox(0, msg.c_str() , "Windows Registry error", MB_SETFOREGROUND);
-		TspTrace("Failed to open key");
+		TspTrace("storeConfigInt: Failed to open key");
 		return false;
 	}
 	return true;
@@ -178,20 +185,20 @@ bool readConfigInt(std::string item, DWORD &value)
 		if ( ERROR_SUCCESS != RegQueryValueEx(ourKey,item.c_str(), 0, &type,(BYTE*)&value,&length ) )
 		{
 			//MessageBox(0, "Failed to read value", "Windows Registry error", MB_SETFOREGROUND);
-			TspTrace("Failed to read value");
+			TspTrace("readConfigInt: Failed to read value %s", item.c_str());
 			return false;
 		}
 		else if ( REG_DWORD != type )
 		{
-			MessageBox(0, "Unexpected data type", "Windows Registry error", MB_SETFOREGROUND);
-			TspTrace("Unexpected data type");
+			MessageBox(0, "readConfigInt: Unexpected data type", "Windows Registry error", MB_SETFOREGROUND);
+			TspTrace("readConfigInt: Unexpected data type for %s", item.c_str());
 			return false;
 		}
 		RegCloseKey(ourKey);
 	}
 	else
 	{
-		std::string msg = "Failed to open key: ";
+		std::string msg = "readConfigInt: Failed to open key: ";
 		msg += RegKey;
 		//MessageBox(0, msg.c_str() , "Windows Registry error", MB_SETFOREGROUND);
 		TspTrace(msg.c_str());

@@ -1150,12 +1150,11 @@ LONG TSPIAPI TUISPI_providerInstall(
 	if( false == readConfigString("host", strData) )
 	{
 		storeConfigString("host", "");
-		storeConfigInt("port", 5038);
 		storeConfigString("user", "");
 		storeConfigString("pass", "");
-		storeConfigString("ochan", "");
 		storeConfigString("uchan", "");
-		storeConfigString("ichan", "");
+		storeConfigString("exten", "");
+		storeConfigInt("reversemode", 0);
 	}
 
 	MessageBox(hwndOwner, "SIP TAPI Service Provider installed",
@@ -1264,8 +1263,6 @@ BOOL CALLBACK ConfigDlgProc(
         //CenterWindow(hwnd);
 		readConfigString("host", temp);
         SetDlgItemText(hwnd, IDC_HOST, temp.c_str());
-		readConfigInt("port", tempInt);
-		SetDlgItemInt(hwnd, IDC_PORT, tempInt,FALSE);
 		readConfigString("user", temp);
 		SetDlgItemText(hwnd, IDC_USER, temp.c_str());
 		readConfigString("userexten", temp);
@@ -1273,47 +1270,11 @@ BOOL CALLBACK ConfigDlgProc(
 		readConfigString("pass", temp);
 		SetDlgItemText(hwnd, IDC_PASS, temp.c_str());
 
-		readConfigString("ochan", temp);
-		SetDlgItemText(hwnd, IDC_OCHAN, temp.c_str());
-		//User channel
-		readConfigString("ichan", temp);
-		SetDlgItemText(hwnd, IDC_ICHAN, temp.c_str());
-		//inbound channel
-		readConfigString("ichanregex", temp);
-		if ( temp == "true" )
-		{
-			CheckDlgButton(hwnd, IDC_ICHREGEX,BST_CHECKED);
-		}
-
 		readConfigString("uchan", temp);
 		SetDlgItemText(hwnd, IDC_UCHAN, temp.c_str());
 
 		readConfigInt("reversemode", tempInt);
 		CheckDlgButton(hwnd, IDC_CHECK_REVERSEMODE, tempInt);
-
-		//CallerID
-		readConfigString("callerid", temp);
-		SetDlgItemText(hwnd, IDC_CALLERID, temp.c_str() );
-
-		readConfigString("setcallerid", temp);
-		if ( temp == "true" )
-		{
-			CheckDlgButton(hwnd, IDC_CALLERIDEN,BST_CHECKED);
-		}
-
-		readConfigString("context", temp);
-		SetDlgItemText(hwnd, IDC_CONTEXT, temp.c_str() );
-
-		readConfigString("contextorchan", temp);
-
-		if ( temp == "context" )
-		{
-			CheckRadioButton(hwnd,IDC_RADIO1, IDC_RADIO2, IDC_RADIO2);
-		}
-		else
-		{
-			CheckRadioButton(hwnd,IDC_RADIO1, IDC_RADIO2, IDC_RADIO1);
-		}
 
         b = TRUE;
     break;
@@ -1323,46 +1284,12 @@ BOOL CALLBACK ConfigDlgProc(
         {
 			        
 		case IDOK:
-			if ( TRUE == IsDlgButtonChecked(hwnd, IDC_ICHREGEX) )
-			{
-				try
-				{
-					GetDlgItemText(hwnd, IDC_ICHAN, szTemp, sizeof(szTemp));
-//					boost::regex e(szTemp);
-				}
-				catch(std::exception e)
-				{
-					//if we get here the regex is invalid
-					MessageBox(hwnd, "Invalid Regular Exression", "Problem", 0);
-					return b;
-				}
-			}
-
             EndDialog(hwnd, IDOK);
 			//plus it will now go onto apply...
 		
 		case IDC_APPLY:
-
-			if ( TRUE == IsDlgButtonChecked(hwnd, IDC_ICHREGEX) )
-			{
-				try
-				{
-					GetDlgItemText(hwnd, IDC_ICHAN, szTemp, sizeof(szTemp));
-//					boost::regex e(szTemp);
-				}
-				catch(std::exception e)
-				{
-					//if we get here the regex is invalid
-					MessageBox(hwnd, "Invalid Regular Exression", "Problem", 0);
-					return b;
-				}
-			}
-			
 			GetDlgItemText(hwnd, IDC_HOST, szTemp, sizeof(szTemp));
 			storeConfigString("host", szTemp);
-
-			tempInt = GetDlgItemInt(hwnd, IDC_PORT, NULL, FALSE);
-			storeConfigInt("port", tempInt);
 
 			GetDlgItemText(hwnd, IDC_USER, szTemp, sizeof(szTemp));
 			storeConfigString("user", szTemp);
@@ -1373,63 +1300,11 @@ BOOL CALLBACK ConfigDlgProc(
 			GetDlgItemText(hwnd, IDC_PASS, szTemp, sizeof(szTemp));
 			storeConfigString("pass", szTemp);
 
-			GetDlgItemText(hwnd, IDC_OCHAN, szTemp, sizeof(szTemp));
-			storeConfigString("ochan", szTemp);
-
-			GetDlgItemText(hwnd, IDC_ICHAN, szTemp, sizeof(szTemp));
-			storeConfigString("ichan", szTemp);
-
-			//store the state of wether we use regular expresion matching
-			//for the inbound channel.
-			if ( TRUE == IsDlgButtonChecked(hwnd, IDC_ICHREGEX) )
-			{
-				storeConfigString("ichanregex", "true");
-			}
-			else
-			{
-				storeConfigString("ichanregex", "false");
-			}
-
-
 			GetDlgItemText(hwnd, IDC_UCHAN, szTemp, sizeof(szTemp));
 			storeConfigString("uchan", szTemp);
 
 			tempInt = IsDlgButtonChecked(hwnd, IDC_CHECK_REVERSEMODE);
 			storeConfigInt("reversemode", tempInt);
-
-			//wether we origintae by call the dial application or 
-			//by dropping a user into a context
-			if ( TRUE == IsDlgButtonChecked(hwnd, IDC_RADIO1) )
-			{
-				storeConfigString("contextorchan", "chan");
-			}
-			else
-			{
-				storeConfigString("contextorchan", "context");
-			}
-
-			//what context?
-			GetDlgItemText(hwnd, IDC_CONTEXT, szTemp, sizeof(szTemp));
-			storeConfigString("context", szTemp);
-
-			//Do we attempt to set the caller ID when we place a call?
-			if ( TRUE == IsDlgButtonChecked(hwnd, IDC_CALLERIDEN) )
-			{
-				storeConfigString("setcallerid", "true");
-			}
-			else
-			{
-				storeConfigString("setcallerid", "false");
-			}
-
-			//Caller ID string
-			GetDlgItemText(hwnd, IDC_CALLERID, szTemp, sizeof(szTemp));
-			storeConfigString("callerid", szTemp);
-
-			GetDlgItemText(hwnd, IDC_CONTEXT, szTemp, sizeof(szTemp));
-			storeConfigString("context", szTemp);
-
-			
 
 			b= TRUE;
 			break;
