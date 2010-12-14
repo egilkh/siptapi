@@ -18,3 +18,10 @@ On 64bit Windows
    64bit applications, but also from 32bit applications, copy the 32bit siptapi.tsp from 
    x86 folder into your WoW64 directory (usually C:\Windows\SysWow64)
 3. Install and configure SIPTAPI using the telephony options from control panel
+
+
+Troubleshooting
+===============
+
+Read the SIPTAPI-README.pdf!!!!!
+

@@ -1,4 +1,8 @@
-SIPTAPI README
+SIPTAPI Changelog
+
+v. 0.2.10
+- added workaround for alternative configuration with XLite/Bria
+- 
 
 v. 0.2.9
 - added file which describes a workaround for TAPI problems in Outlook 2007/2010
@@ -7,6 +11,8 @@ v. 0.2.9
   and once the target answers, it gets refered to the user's phone.
   Note: In reverse mode you wont get any audible call progress indication (e.g. ringback, busy tone ...)
 - location of SIPTAPI settings changed (should work better with security features of Vista and Windows 7)
+  old location: HKEY_LOCAL_MACHINE\SOFTWARE\Software\enum.at\SipTapi
+  new location: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Telephony\SipTapiSF
 - Sourceforge code repository migrated from CVS to SVN
 
 v. 0.2.8

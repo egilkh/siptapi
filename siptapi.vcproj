@@ -420,7 +420,27 @@
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\ReadMe.txt"
+			RelativePath=".\deploy\Changelog.txt"
+			>
+		</File>
+		<File
+			RelativePath=".\deploy\Install.txt"
+			>
+		</File>
+		<File
+			RelativePath=".\deploy\Outlook2007 and Outlook2010 Problems.txt"
+			>
+		</File>
+		<File
+			RelativePath=".\SIPTAPI-compatibility-matrix.txt"
+			>
+		</File>
+		<File
+			RelativePath=".\siptapi-ToDo.txt"
+			>
+		</File>
+		<File
+			RelativePath=".\SIPTAPI.txt"
 			>
 		</File>
 	</Files>

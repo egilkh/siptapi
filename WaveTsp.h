@@ -30,11 +30,11 @@
 #define DIM(rg) (sizeof(rg)/sizeof(*rg))
 
 #ifdef _DEBUG
-#define SIPTAPI_VERSION_W L"v0.2.9 Debug"
-#define SIPTAPI_VERSION    "v0.2.9 Debug"
+#define SIPTAPI_VERSION_W L"v0.2.10 Debug"
+#define SIPTAPI_VERSION    "v0.2.10 Debug"
 #else
-#define SIPTAPI_VERSION_W L"v0.2.9 Release"
-#define SIPTAPI_VERSION    "v0.2.9 Release"
+#define SIPTAPI_VERSION_W L"v0.2.10 Release"
+#define SIPTAPI_VERSION    "v0.2.10 Release"
 #endif
 
 // Data sent back and forth between UI and TSP during a dial operation
