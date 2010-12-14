@@ -364,24 +364,27 @@ DWORD astManager::originate(std::string destAddress)
 	// from:  wir
 	// to:    das final target
 	// exten: das lokale SIP Telefon
-	this->to    = ("sip:")  + destAddress     + ("@") +  this->originator;
-	this->from  = ("sip:")  + this->user      + ("@") +  this->originator;
-	if (this->userexten == "") {
-		this->exten = ("sip:")  + this->user + ("@") +  this->originator;
-	} else {
-		this->exten = ("sip:")  + this->userexten + ("@") +  this->originator;
-	}
-//	route       = ("<sip:") + this->host  + (";lr>");
-//	route       = ("\0");
+	this->to   = ("sip:") + destAddress + ("@") + this->originator;
+	this->from = ("sip:") + this->user  + ("@") + this->originator;
+    if (this->userexten == "") {
+        // use SIP AoR username as destination
+        this->exten = ("sip:") + this->user + ("@") + this->originator;
+    } else {
+        if (this->userexten.find("@") == std::string::npos) {
+            this->exten = ("sip:") + this->userexten + ("@") + this->originator;
+        } else {
+            this->exten = ("sip:") + this->userexten;
+        }
+    }
 	if (this->host == "") {
-		route   = ("");
+		route = ("");
 	} else {
 		if (this->host.find(";lr") == std::string::npos) {
 			// not found
-			route   = ("<sip:") + this->host  + (";lr>");
+			route = ("<sip:") + this->host + (";lr>");
 		} else {
 			// found
-			route   = ("<sip:") + this->host  + (">");
+			route = ("<sip:") + this->host + (">");
 		}
 	}
 
@@ -393,7 +396,7 @@ DWORD astManager::originate(std::string destAddress)
 	}
 
 	TspTrace("From:     this->from.data()  ='%s'",this->from.data());
-	TspTrace("To:       this->exten.data() ='%s'",this->exten.data());
+	TspTrace("RURI/To:  this->exten.data() ='%s'",this->exten.data());
 	TspTrace("Refer-To: this->to.data()    ='%s'",this->to.data());
 	TspTrace("Route:    route.data()       ='%s'",route.data());
 
