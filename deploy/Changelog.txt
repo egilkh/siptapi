@@ -1,5 +1,8 @@
 SIPTAPI Changelog
 
+v. 0.2.11
+- added codecs in initial SDP: G722 and G728
+
 v. 0.2.10
 - added workaround for alternative configuration with XLite/Bria
 - enhanced documentation
