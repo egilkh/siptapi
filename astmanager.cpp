@@ -423,7 +423,7 @@ DWORD astManager::originate(std::string destAddress)
 		"s=click2dial call\r\n"
 		"c=IN IP4 %s\r\n"
 		"t=0 0\r\n"
-		"m=audio %s RTP/AVP 0 8 18 3 4 97 98\r\n"
+		"m=audio %s RTP/AVP 0 8 18 3 4 9 15 97 98\r\n"
 		"a=rtpmap:0 PCMU/8000\r\n"
 		"a=rtpmap:18 G729/8000\r\n"
 		"a=rtpmap:97 ilbc/8000\r\n"
