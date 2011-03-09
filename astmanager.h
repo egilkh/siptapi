@@ -119,7 +119,7 @@ class astManager
 		void setContext(std::string context);
 		void setCallerID(std::string callerid);
 		void setUsernamePassword(std::string username, std::string usernameexten, 
-			std::string password);
+			std::string password, std::string authusername);
 		//things we can do
 		int astManager::astConnect(void);
 		DWORD originate(std::string destAddress);
@@ -142,6 +142,7 @@ protected:
 
 		//asterisk username and password
         std::string user;
+        std::string authuser;
         std::string userexten;
         std::string pass;
         

@@ -126,9 +126,10 @@ void astManager::setPort(DWORD astPort)
 //
 ////////////////////////////////////////////////////////////////////////////////
 void astManager::setUsernamePassword(std::string username, std::string usernameexten,
-									 std::string password)
+									 std::string password, std::string authusername)
 {
     this->user = username;
+    this->authuser = authusername;
     this->userexten = usernameexten;
     this->pass = password;
 }
@@ -346,8 +347,14 @@ DWORD astManager::originate(std::string destAddress)
 {
 	int i;
 
+	if (this->authuser == "") {
+		this->authuser = this->user;
+		TspTrace("authusername = %s",this->authuser.data());
+	}
+
 	i = eXosip_clear_authentication_info();
-	i = eXosip_add_authentication_info(this->user.data(), this->user.data(), this->pass.data(), "", "");
+	i = eXosip_add_authentication_info(this->user.data(), 
+		this->authuser.data(), this->pass.data(), "", "");
 	
 	osip_message_t *invite;
 	std::string route;

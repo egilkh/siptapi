@@ -11,6 +11,7 @@
 #define IDC_OCHAN                       1006
 #define IDC_USER_EXTEN                  1006
 #define IDC_CONTEXT                     1007
+#define IDC_AUTHUSER                    1007
 #define IDC_BUTTON1                     1008
 #define IDC_APPLY                       1008
 #define IDC_RADIO1                      1009

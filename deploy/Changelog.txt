@@ -1,5 +1,8 @@
 SIPTAPI Changelog
 
+v. 0.2.12
+- added authentication user
+
 v. 0.2.11
 - added codecs in initial SDP: G722 and G728
 
