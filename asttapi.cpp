@@ -503,6 +503,18 @@ LONG TSPIAPI TSPI_lineOpen(
 			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X reverse-mode  deactivated\n", dwDeviceID);
 		}
 
+		if ( false == readConfigInt("autoanswer", tempInt) ) {
+			TspTrace("Info: failed reading autoanswer, use 'off' ...");
+	        ourConnection->autoAnswer = 0;
+		} else {
+	        ourConnection->autoAnswer = tempInt;
+		}
+		if (tempInt) {
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X auto-answer activated\n", dwDeviceID);
+		} else {
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X auto-answer deactivated\n", dwDeviceID);
+		}
+
 		// initialize SIP stack
 		if ( ourConnection->astConnect() == 0)
 		{
@@ -1159,6 +1171,7 @@ LONG TSPIAPI TUISPI_providerInstall(
 		storeConfigString("uchan", "");
 		storeConfigString("exten", "");
 		storeConfigInt("reversemode", 0);
+		storeConfigInt("autoanswer", 0);
 	}
 
 	MessageBox(hwndOwner, "SIP TAPI Service Provider installed",
@@ -1281,6 +1294,8 @@ BOOL CALLBACK ConfigDlgProc(
 
 		readConfigInt("reversemode", tempInt);
 		CheckDlgButton(hwnd, IDC_CHECK_REVERSEMODE, tempInt);
+		readConfigInt("autoanswer", tempInt);
+		CheckDlgButton(hwnd, IDC_AUTOANSWER, tempInt);
 
         b = TRUE;
     break;
@@ -1314,6 +1329,9 @@ BOOL CALLBACK ConfigDlgProc(
 
 			tempInt = IsDlgButtonChecked(hwnd, IDC_CHECK_REVERSEMODE);
 			storeConfigInt("reversemode", tempInt);
+
+			tempInt = IsDlgButtonChecked(hwnd, IDC_AUTOANSWER);
+			storeConfigInt("autoanswer", tempInt);
 
 			b= TRUE;
 			break;

@@ -64,34 +64,36 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 // Dialog
 //
 
-IDD_DIALOG1 DIALOGEX 0, 0, 293, 257
+IDD_DIALOG1 DIALOGEX 0, 0, 293, 276
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "SIPTAPI Configuration"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     EDITTEXT        IDC_UCHAN,120,20,156,13,ES_AUTOHSCROLL
     EDITTEXT        IDC_HOST,120,40,156,13,ES_AUTOHSCROLL
-    EDITTEXT        IDC_USER,120,107,156,13,ES_AUTOHSCROLL
-    EDITTEXT        IDC_PASS,120,127,156,13,ES_PASSWORD | ES_AUTOHSCROLL
-    EDITTEXT        IDC_USER_EXTEN,120,167,156,13,ES_AUTOHSCROLL
-    DEFPUSHBUTTON   "OK",IDOK,15,212,50,14
-    PUSHBUTTON      "Apply",IDC_APPLY,120,212,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,226,212,50,14
+    EDITTEXT        IDC_USER,120,137,156,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PASS,120,157,156,13,ES_PASSWORD | ES_AUTOHSCROLL
+    EDITTEXT        IDC_USER_EXTEN,120,197,156,13,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,15,233,50,14
+    PUSHBUTTON      "Apply",IDC_APPLY,120,233,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,226,233,50,14
     LTEXT           "SIP Outbound Proxy",IDC_STATIC,15,43,71,10
-    LTEXT           "User",IDC_STATIC,15,112,52,8
-    LTEXT           "Password",IDC_STATIC,15,130,52,10
-    GROUPBOX        "User Information",IDC_STATIC,7,88,279,101
-    LTEXT           "SIPTAPI: A TAPI Service Provider based on SIP",IDC_STATIC,15,231,201,8
+    LTEXT           "User",IDC_STATIC,15,142,52,8
+    LTEXT           "Password",IDC_STATIC,15,160,52,10
+    GROUPBOX        "User Information",IDC_STATIC,7,118,279,101
+    LTEXT           "SIPTAPI: A TAPI Service Provider based on SIP",IDC_STATIC,15,252,201,8
     LTEXT           "SIP Domain",IDC_STATIC,15,23,45,10
-    GROUPBOX        "SIP Configuration",IDC_STATIC,7,3,279,76
-    LTEXT           "For help and information got to www.ipcom.at",IDC_STATIC,15,238,161,8
-    GROUPBOX        "",IDC_STATIC,7,203,279,47
-    LTEXT           "v_0.2.12",IDC_STATIC,246,236,30,8
-    LTEXT           "User's extension (optional)",IDC_STATIC,15,171,105,9
+    GROUPBOX        "SIP Configuration",IDC_STATIC,7,3,279,102
+    LTEXT           "For help and information got to www.ipcom.at",IDC_STATIC,15,259,161,8
+    GROUPBOX        "",IDC_STATIC,7,222,279,47
+    LTEXT           "v_0.2.13",IDC_STATIC,246,257,30,8
+    LTEXT           "User's extension (optional)",IDC_STATIC,15,201,105,9
     CONTROL         "reverse mode (do not activate unless you really know what you are doing!)",IDC_CHECK_REVERSEMODE,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,62,257,10
-    EDITTEXT        IDC_AUTHUSER,120,147,156,13,ES_AUTOHSCROLL
-    LTEXT           "Authentication-User (optional)",IDC_STATIC,15,151,100,9
+    EDITTEXT        IDC_AUTHUSER,120,177,156,13,ES_AUTOHSCROLL
+    LTEXT           "Authentication-User (optional)",IDC_STATIC,15,181,100,9
+    CONTROL         "auto answer (adds a Header to indicate auto answer to SIP phone)",IDC_AUTOANSWER,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,78,231,10
 END
 
 
@@ -111,7 +113,7 @@ BEGIN
         VERTGUIDE, 120
         VERTGUIDE, 276
         TOPMARGIN, 7
-        BOTTOMMARGIN, 250
+        BOTTOMMARGIN, 269
         HORZGUIDE, 33
         HORZGUIDE, 53
         HORZGUIDE, 97

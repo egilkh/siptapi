@@ -90,6 +90,7 @@ class astManager
 		~astManager();
 
 		int reverseMode;
+		int autoAnswer;
 		DWORD dwCallState;
 		DWORD dwCallStateMode;
 

@@ -440,6 +440,27 @@ DWORD astManager::originate(std::string destAddress)
 	osip_message_set_body(invite, tmp, strlen(tmp));
 	osip_message_set_content_type(invite, "application/sdp");
 
+	if (this->autoAnswer) {
+		TspTrace("auto-answer is activated, adding headers ...");
+		// add header to indicate to the SIP phone that it should
+		// auto-answer the phone call
+		// SNOM: http://asterisk.snom.com/index.php/Asterisk_1.4/Intercom
+		i = osip_message_set_header(invite, "Call-Info", "<sip:127.0.0.1>;answer-after=0");
+		if (i != 0) {
+			TspTrace("osip_message_set_header SNOM failed ...");
+		}
+		// Polycom: http://www.voip-info.org/wiki/view/Polycom+auto-answer+config
+		i = osip_message_set_header(invite, "Alert-Info", "Ring Answer");
+		if (i != 0) {
+			TspTrace("osip_message_set_header POLYCOM failed ...");
+		}
+		// Aastra: http://www.voip-info.org/wiki/view/Sayson+IP+Phone+Auto+Answer
+		//i = osip_message_set_header(invite, "Alert-Info", "info=alert-autoanswer");
+		//if (i != 0) {
+		//	TspTrace("osip_message_set_header Aastra failed ...");
+		//}
+	}
+
 	eXosip_lock();
 	i = eXosip_call_send_initial_invite(invite);
 	if (i == -1) {
