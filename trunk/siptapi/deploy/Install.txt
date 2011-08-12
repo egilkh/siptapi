@@ -1,24 +1,32 @@
 A short SIPTAPI installation tutorial .....
 
-(Note: For better debugging the binaries are usually built 
-in "Debug" mode, and thus write a log file to c:\siptapi_0.2.log)
+There are 2 versions available: Release and Debug. From functionality point 
+of view they are ocmpletely identical, except that the Debug version writes
+log messages to the file c:\siptapi_0.2.log and sends kernel log messages 
+which can be read for eaxmple with DebugView)
+
+If you have troubles you should install the Debug version.
 
 On 32bit Windows
 =================
-1. Copy siptapi.tsp from x86 folder into your Windows system32 directory 
+1. Copy siptapi.tsp from 32bit folder into your Windows system32 directory 
    (usually C:\Windows\System32)
 2. Install and configure SIPTAPI using the telephony options from control panel
 
 On 64bit Windows
 =================
-1. Copy siptapi.tsp from x64 folder into your Windows system32 directory 
+1. Copy siptapi.tsp from 64bit folder into your Windows system32 directory 
    (usually C:\Windows\System32). This gives you full TAPI support with 64 and 32bit
    TAPI applications
 2. If you want to configure SIPTAPI not only from the telephony control panel and from
    64bit applications, but also from 32bit applications, copy the 32bit siptapi.tsp from 
-   x86 folder into your WoW64 directory (usually C:\Windows\SysWow64)
+   32bit folder into your WoW64 directory (usually C:\Windows\SysWow64)
 3. Install and configure SIPTAPI using the telephony options from control panel
 
+NOTE:
+=====
+Usually, starting with Windows Vista and above, you must configure SIPTAPI as Administrator via
+the control panel - otherwise you do not have proper rights.
 
 Troubleshooting
 ===============
