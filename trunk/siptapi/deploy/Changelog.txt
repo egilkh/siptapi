@@ -3,7 +3,7 @@ SIPTAPI Changelog
 v. 0.2.13
 - added auto-answer: add header to indicate to phone that it should answer the call
   SNOM: http://asterisk.snom.com/index.php/Asterisk_1.4/Intercom
-    Call-Info: <sip:127.0.0.1>;answer-after=0");
+    Call-Info: <sip:127.0.0.1>;answer-after=0
   Polycom: http://www.voip-info.org/wiki/view/Polycom+auto-answer+config
     Alert-Info: Ring Answer
 
