@@ -1,5 +1,9 @@
 SIPTAPI Changelog
 
+v. 0.2.14
+- better handling of NOTIFYs after REFER: wait with sending BYE until NOTIFY with 
+  final response in sipfrag body or until timeout happens
+
 v. 0.2.13
 - added auto-answer: add header to indicate to phone that it should answer the call
   SNOM: http://asterisk.snom.com/index.php/Asterisk_1.4/Intercom

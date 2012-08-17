@@ -86,7 +86,7 @@ BEGIN
     GROUPBOX        "SIP Configuration",IDC_STATIC,7,3,279,102
     LTEXT           "For help and information got to www.ipcom.at",IDC_STATIC,15,259,161,8
     GROUPBOX        "",IDC_STATIC,7,222,279,47
-    LTEXT           "v_0.2.13",IDC_STATIC,246,257,30,8
+    LTEXT           "v_0.2.14",IDC_STATIC,246,257,30,8
     LTEXT           "User's extension (optional)",IDC_STATIC,15,201,105,9
     CONTROL         "reverse mode (do not activate unless you really know what you are doing!)",IDC_CHECK_REVERSEMODE,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,62,257,10
@@ -132,8 +132,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,2,12,0
- PRODUCTVERSION 0,2,13,0
+ FILEVERSION 0,2,14,0
+ PRODUCTVERSION 0,2,14,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -150,14 +150,14 @@ BEGIN
         BEGIN
             VALUE "Comments", "SIPTAPI - a TAPI service provider for the SIP"
             VALUE "CompanyName", "www.ipcom.at"
-            VALUE "FileDescription", "SIPTAPI Service Provider 0.2.13"
-            VALUE "FileVersion", "0, 2, 13, 0"
+            VALUE "FileDescription", "SIPTAPI Service Provider 0.2.14"
+            VALUE "FileVersion", "0, 2, 14, 0"
             VALUE "InternalName", "siptapi"
-            VALUE "LegalCopyright", "Copyright (C) 2004, 2005, 2006, 2009, 2010, 2011"
+            VALUE "LegalCopyright", "Copyright (C) 2004, 2005, 2006, 2009, 2010, 2011, 2012"
             VALUE "LegalTrademarks", "Please see the copyright notice for further information"
             VALUE "OriginalFilename", "siptapi.tsp"
             VALUE "ProductName", "siptapi"
-            VALUE "ProductVersion", "0, 2, 13, 0"
+            VALUE "ProductVersion", "0, 2, 14, 0"
         END
     END
     BLOCK "VarFileInfo"
