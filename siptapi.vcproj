@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\libosip2\include;..\..\libeXosip2\include"
+				AdditionalIncludeDirectories="..\..\osip\libosip2\include;..\..\osip\libeXosip2\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;ASTTAPI_EXPORTS;DEBUGTSP;BOOST_REGEX_NO_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -66,7 +66,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="WSOCK32.LIB ..\..\libeXosip2\platform\vsnet\Debug\eXosip.lib ..\..\libosip2\platform\vsnet\Debug\osip2.lib ..\..\libosip2\platform\vsnet\Debug\osipparser2.lib Iphlpapi.lib ws2_32.lib Dnsapi.lib atls.lib"
+				AdditionalDependencies="WSOCK32.LIB ..\..\osip\libeXosip2\platform\vsnet\Debug\eXosip.lib ..\..\osip\libosip2\platform\vsnet\Debug\osip2.lib ..\..\osip\libosip2\platform\vsnet\Debug\osipparser2.lib Iphlpapi.lib ws2_32.lib Dnsapi.lib atls.lib"
 				OutputFile="$(OutDir)/siptapi.tsp"
 				Version="0.1"
 				LinkIncremental="2"
@@ -128,7 +128,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\libosip2\include;..\..\libeXosip2\include"
+				AdditionalIncludeDirectories="..\..\osip\libosip2\include;..\..\osip\libeXosip2\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;ASTTAPI_EXPORTS;DEBUGTSP;BOOST_REGEX_NO_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -149,7 +149,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="WSOCK32.LIB ..\..\libeXosip2\platform\vsnet\x64\Debug\eXosip.lib ..\..\libosip2\platform\vsnet\x64\Debug\osip2.lib ..\..\libosip2\platform\vsnet\x64\Debug\osipparser2.lib Iphlpapi.lib ws2_32.lib Dnsapi.lib atls.lib"
+				AdditionalDependencies="WSOCK32.LIB ..\..\osip\libeXosip2\platform\vsnet\x64\Debug\eXosip.lib ..\..\osip\libosip2\platform\vsnet\x64\Debug\osip2.lib ..\..\osip\libosip2\platform\vsnet\x64\Debug\osipparser2.lib Iphlpapi.lib ws2_32.lib Dnsapi.lib atls.lib"
 				OutputFile="$(OutDir)/siptapi.tsp"
 				Version="0.1"
 				LinkIncremental="2"
@@ -209,7 +209,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\libosip2\include;..\..\libeXosip2\include"
+				AdditionalIncludeDirectories="..\..\osip\libosip2\include;..\..\osip\libeXosip2\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ASTTAPI_EXPORTS;BOOST_REGEX_NO_LIB"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -228,7 +228,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="WSOCK32.LIB ..\..\libeXosip2\platform\vsnet\Release\eXosip.lib ..\..\libosip2\platform\vsnet\Release\osip2.lib ..\..\libosip2\platform\vsnet\Release\osipparser2.lib Iphlpapi.lib ws2_32.lib Dnsapi.lib atls.lib"
+				AdditionalDependencies="WSOCK32.LIB ..\..\osip\libeXosip2\platform\vsnet\Release\eXosip.lib ..\..\osip\libosip2\platform\vsnet\Release\osip2.lib ..\..\osip\libosip2\platform\vsnet\Release\osipparser2.lib Iphlpapi.lib ws2_32.lib Dnsapi.lib atls.lib"
 				OutputFile="$(OutDir)/siptapi.tsp"
 				Version="0.3"
 				LinkIncremental="2"
@@ -290,7 +290,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\libosip2\include;..\..\libeXosip2\include"
+				AdditionalIncludeDirectories="..\..\osip\libosip2\include;..\..\osip\libeXosip2\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;ASTTAPI_EXPORTS;BOOST_REGEX_NO_LIB"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -309,7 +309,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="WSOCK32.LIB ..\..\libeXosip2\platform\vsnet\x64\Release\eXosip.lib ..\..\libosip2\platform\vsnet\x64\Release\osip2.lib ..\..\libosip2\platform\vsnet\x64\Release\osipparser2.lib Iphlpapi.lib ws2_32.lib Dnsapi.lib atls.lib"
+				AdditionalDependencies="WSOCK32.LIB ..\..\osip\libeXosip2\platform\vsnet\x64\Release\eXosip.lib ..\..\osip\libosip2\platform\vsnet\x64\Release\osip2.lib ..\..\osip\libosip2\platform\vsnet\x64\Release\osipparser2.lib Iphlpapi.lib ws2_32.lib Dnsapi.lib atls.lib"
 				OutputFile="$(OutDir)/siptapi.tsp"
 				Version="0.3"
 				LinkIncremental="2"

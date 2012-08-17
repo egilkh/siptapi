@@ -495,10 +495,30 @@ DWORD tapiAstManager::processMessages(void)
 								TspTrace("sending answer ... done\n");
 							}
 						}
-						eXosip_unlock();
-						//ToDo: check sipfrag response code
+
+						// check sipfrag response code, >=200 is final response which will cause a BYE
+						osip_body_t *body = NULL;
+						i = osip_message_get_body(je->request, 0, &body);
+						if (i != 0) {
+							TspTrace("osip_message_get_body failed...\n");
+							eXosip_unlock();
+							this->dropChannel();
+							break;
+						}
+						TspTrace("osip_message_get_body succeeded...\n");
+						if (body == NULL) {
+							TspTrace("no body in NOTIFY ... ignore this NOTIFY and wait for next NOTIFY\n");
+							eXosip_unlock();
+							break;
+						}
+						TspTrace("bodylen=%d, body is: %.*s\n", body->length, body->length, body->body);
+						if ( !strncmp(body->body, "SIP/2.0 1", min(body->length, 9)) ) {
+							TspTrace("provisional response in NOTIFY body ... ignore this NOTIFY and wait for next NOTIFY\n");
+							eXosip_unlock();
+							break;
+						}
+						TspTrace("final response (or garbage) in NOTIFY body ... terminate call\n");
 						TspTrace("sending BYE (ToDo: check sipfrag response code)..");
-						eXosip_lock();
 						i = eXosip_call_terminate(je->cid, je->did);
 						if (i != 0) {
 							TspTrace("eXosip_call_terminate failed...");
