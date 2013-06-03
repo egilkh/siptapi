@@ -454,6 +454,14 @@ DWORD astManager::originate(std::string destAddress)
 		if (i != 0) {
 			TspTrace("osip_message_set_header POLYCOM failed ...");
 		}
+	}
+	if (this->autoAnswer2) {
+		TspTrace("auto-answer2 is activated, adding headers ...");
+		// Siemens: http://wiki.siemens-enterprise.com/wiki/Asterisk_Feature_Example_Configuration#Auto_Answer
+		i = osip_message_set_header(invite, "Alert-Info", "<http://example.com>;info=alert-autoanswer");
+		if (i != 0) {
+			TspTrace("osip_message_set_header SIEMENS failed ...");
+		}
 		// Aastra: http://www.voip-info.org/wiki/view/Sayson+IP+Phone+Auto+Answer
 		//i = osip_message_set_header(invite, "Alert-Info", "info=alert-autoanswer");
 		//if (i != 0) {
