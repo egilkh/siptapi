@@ -245,7 +245,11 @@ LONG TSPIAPI TSPI_providerEnumDevices(
 
 	g_hProvider = hProvider;
 	*lpdwNumLines = 1;
+/* // fix for Windows 8
+	*lpdwNumPhones = 0;
+*/
 	*lpdwNumPhones = 1;
+
 	return EPILOG(0);
 }
 
@@ -513,6 +517,18 @@ LONG TSPIAPI TSPI_lineOpen(
 			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X auto-answer activated\n", dwDeviceID);
 		} else {
 			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X auto-answer deactivated\n", dwDeviceID);
+		}
+
+		if ( false == readConfigInt("autoanswer2", tempInt) ) {
+			TspTrace("Info: failed reading autoanswer2, use 'off' ...");
+	        ourConnection->autoAnswer2 = 0;
+		} else {
+	        ourConnection->autoAnswer2 = tempInt;
+		}
+		if (tempInt) {
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X auto-answer2 activated\n", dwDeviceID);
+		} else {
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X auto-answer2 deactivated\n", dwDeviceID);
 		}
 
 		// initialize SIP stack
@@ -1172,6 +1188,7 @@ LONG TSPIAPI TUISPI_providerInstall(
 		storeConfigString("exten", "");
 		storeConfigInt("reversemode", 0);
 		storeConfigInt("autoanswer", 0);
+		storeConfigInt("autoanswer2", 0);
 	}
 
 	MessageBox(hwndOwner, "SIP TAPI Service Provider installed",
@@ -1296,6 +1313,8 @@ BOOL CALLBACK ConfigDlgProc(
 		CheckDlgButton(hwnd, IDC_CHECK_REVERSEMODE, tempInt);
 		readConfigInt("autoanswer", tempInt);
 		CheckDlgButton(hwnd, IDC_AUTOANSWER, tempInt);
+		readConfigInt("autoanswer2", tempInt);
+		CheckDlgButton(hwnd, IDC_AUTOANSWER2, tempInt);
 
         b = TRUE;
     break;
@@ -1332,6 +1351,9 @@ BOOL CALLBACK ConfigDlgProc(
 
 			tempInt = IsDlgButtonChecked(hwnd, IDC_AUTOANSWER);
 			storeConfigInt("autoanswer", tempInt);
+
+			tempInt = IsDlgButtonChecked(hwnd, IDC_AUTOANSWER2);
+			storeConfigInt("autoanswer2", tempInt);
 
 			b= TRUE;
 			break;

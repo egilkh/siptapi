@@ -3,6 +3,9 @@ SIPTAPI Changelog
 v. 0.2.14
 - better handling of NOTIFYs after REFER: wait with sending BYE until NOTIFY with 
   final response in sipfrag body or until timeout happens
+- new auto-answer option for Siemens phones 
+  http://wiki.siemens-enterprise.com/wiki/Asterisk_Feature_Example_Configuration#Auto_Answer
+  Alert-Info: <http://example.com>;info=alert-autoanswer
 
 v. 0.2.13
 - added auto-answer: add header to indicate to phone that it should answer the call

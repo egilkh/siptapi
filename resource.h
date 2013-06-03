@@ -25,6 +25,7 @@
 #define IDC_AUTOANSWER                  1013
 #define IDC_CALLERIDEN2                 1014
 #define IDC_ICHREGEX                    1014
+#define IDC_AUTOANSWER2                 1014
 
 // Next default values for new objects
 // 
