@@ -64,36 +64,37 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 // Dialog
 //
 
-IDD_DIALOG1 DIALOGEX 0, 0, 293, 276
+IDD_DIALOG1 DIALOGEX 0, 0, 307, 296
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "SIPTAPI Configuration"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    EDITTEXT        IDC_UCHAN,120,20,156,13,ES_AUTOHSCROLL
-    EDITTEXT        IDC_HOST,120,40,156,13,ES_AUTOHSCROLL
-    EDITTEXT        IDC_USER,120,137,156,13,ES_AUTOHSCROLL
-    EDITTEXT        IDC_PASS,120,157,156,13,ES_PASSWORD | ES_AUTOHSCROLL
-    EDITTEXT        IDC_USER_EXTEN,120,197,156,13,ES_AUTOHSCROLL
-    DEFPUSHBUTTON   "OK",IDOK,15,233,50,14
-    PUSHBUTTON      "Apply",IDC_APPLY,120,233,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,226,233,50,14
+    EDITTEXT        IDC_UCHAN,120,20,170,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_HOST,120,40,170,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_USER,120,156,170,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PASS,120,176,170,13,ES_PASSWORD | ES_AUTOHSCROLL
+    EDITTEXT        IDC_USER_EXTEN,120,216,170,13,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,15,252,50,14
+    PUSHBUTTON      "Apply",IDC_APPLY,120,252,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,240,252,50,14
     LTEXT           "SIP Outbound Proxy",IDC_STATIC,15,43,71,10
-    LTEXT           "User",IDC_STATIC,15,142,52,8
-    LTEXT           "Password",IDC_STATIC,15,160,52,10
-    GROUPBOX        "User Information",IDC_STATIC,7,118,279,101
-    LTEXT           "SIPTAPI: A TAPI Service Provider based on SIP",IDC_STATIC,15,252,201,8
+    LTEXT           "User",IDC_STATIC,15,161,52,8
+    LTEXT           "Password",IDC_STATIC,15,179,52,10
+    GROUPBOX        "User Information",IDC_STATIC,7,137,293,101
+    LTEXT           "SIPTAPI: A TAPI Service Provider based on SIP",IDC_STATIC,15,271,201,8
     LTEXT           "SIP Domain",IDC_STATIC,15,23,45,10
-    GROUPBOX        "SIP Configuration",IDC_STATIC,7,3,279,102
-    LTEXT           "For help and information got to www.ipcom.at",IDC_STATIC,15,259,161,8
-    GROUPBOX        "",IDC_STATIC,7,222,279,47
-    LTEXT           "v_0.2.14",IDC_STATIC,246,257,30,8
-    LTEXT           "User's extension (optional)",IDC_STATIC,15,201,105,9
-    CONTROL         "reverse mode (do not activate unless you really know what you are doing!)",IDC_CHECK_REVERSEMODE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,62,257,10
-    EDITTEXT        IDC_AUTHUSER,120,177,156,13,ES_AUTOHSCROLL
-    LTEXT           "Authentication-User (optional)",IDC_STATIC,15,181,100,9
-    CONTROL         "auto answer (adds a Header to indicate auto answer to SIP phone)",IDC_AUTOANSWER,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,78,231,10
+    GROUPBOX        "SIP Configuration",IDC_STATIC,7,3,293,124
+    LTEXT           "For help and information got to www.ipcom.at",IDC_STATIC,15,278,161,8
+    GROUPBOX        "",IDC_STATIC,7,243,293,46
+    LTEXT           "v_0.2.14",IDC_STATIC,260,276,30,8
+    LTEXT           "User's extension (optional)",IDC_STATIC,15,220,105,9
+    CONTROL         "Reverse Mode (do not activate unless you really know what you are doing!)",IDC_CHECK_REVERSEMODE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,62,259,10
+    EDITTEXT        IDC_AUTHUSER,120,196,170,13,ES_AUTOHSCROLL
+    LTEXT           "Authentication-User (optional)",IDC_STATIC,15,200,100,9
+    CONTROL         "Auto Answer: Polycom, SNOM-old",IDC_AUTOANSWER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,94,124,10
+    CONTROL         "Auto Answer: Siemens, SNOM-new",IDC_AUTOANSWER2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,108,128,10
+    LTEXT           "Auto Answer (adds a SIP Header to indicate auto answer to phone, choose only one)",IDC_STATIC,15,80,274,8
 END
 
 
@@ -108,12 +109,12 @@ BEGIN
     IDD_DIALOG1, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 286
+        RIGHTMARGIN, 300
         VERTGUIDE, 15
         VERTGUIDE, 120
-        VERTGUIDE, 276
+        VERTGUIDE, 290
         TOPMARGIN, 7
-        BOTTOMMARGIN, 269
+        BOTTOMMARGIN, 289
         HORZGUIDE, 33
         HORZGUIDE, 53
         HORZGUIDE, 97
