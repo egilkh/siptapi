@@ -507,6 +507,18 @@ LONG TSPIAPI TSPI_lineOpen(
 			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X reverse-mode  deactivated\n", dwDeviceID);
 		}
 
+		if ( false == readConfigInt("dontsendbye", tempInt) ) {
+			TspTrace("Info: failed reading dontsendbye, use 'off' ...");
+	        ourConnection->dontSendBye = 0;
+		} else {
+	        ourConnection->dontSendBye = tempInt;
+		}
+		if (tempInt) {
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X dontsendbye activated\n", dwDeviceID);
+		} else {
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X dontsendbye deactivated\n", dwDeviceID);
+		}
+
 		if ( false == readConfigInt("autoanswer", tempInt) ) {
 			TspTrace("Info: failed reading autoanswer, use 'off' ...");
 	        ourConnection->autoAnswer = 0;
@@ -1187,6 +1199,7 @@ LONG TSPIAPI TUISPI_providerInstall(
 		storeConfigString("uchan", "");
 		storeConfigString("exten", "");
 		storeConfigInt("reversemode", 0);
+		storeConfigInt("dontsendbye", 0);
 		storeConfigInt("autoanswer", 0);
 		storeConfigInt("autoanswer2", 0);
 	}
@@ -1311,6 +1324,8 @@ BOOL CALLBACK ConfigDlgProc(
 
 		readConfigInt("reversemode", tempInt);
 		CheckDlgButton(hwnd, IDC_CHECK_REVERSEMODE, tempInt);
+		readConfigInt("dontsendbye", tempInt);
+		CheckDlgButton(hwnd, IDC_CHECK_DONTSENDBYE, tempInt);
 		readConfigInt("autoanswer", tempInt);
 		CheckDlgButton(hwnd, IDC_AUTOANSWER, tempInt);
 		readConfigInt("autoanswer2", tempInt);
@@ -1348,6 +1363,9 @@ BOOL CALLBACK ConfigDlgProc(
 
 			tempInt = IsDlgButtonChecked(hwnd, IDC_CHECK_REVERSEMODE);
 			storeConfigInt("reversemode", tempInt);
+
+			tempInt = IsDlgButtonChecked(hwnd, IDC_CHECK_DONTSENDBYE);
+			storeConfigInt("dontsendbye", tempInt);
 
 			tempInt = IsDlgButtonChecked(hwnd, IDC_AUTOANSWER);
 			storeConfigInt("autoanswer", tempInt);

@@ -64,37 +64,40 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 // Dialog
 //
 
-IDD_DIALOG1 DIALOGEX 0, 0, 307, 296
+IDD_DIALOG1 DIALOGEX 0, 0, 307, 350
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "SIPTAPI Configuration"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     EDITTEXT        IDC_UCHAN,120,20,170,13,ES_AUTOHSCROLL
     EDITTEXT        IDC_HOST,120,40,170,13,ES_AUTOHSCROLL
-    EDITTEXT        IDC_USER,120,156,170,13,ES_AUTOHSCROLL
-    EDITTEXT        IDC_PASS,120,176,170,13,ES_PASSWORD | ES_AUTOHSCROLL
-    EDITTEXT        IDC_USER_EXTEN,120,216,170,13,ES_AUTOHSCROLL
-    DEFPUSHBUTTON   "OK",IDOK,15,252,50,14
-    PUSHBUTTON      "Apply",IDC_APPLY,120,252,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,240,252,50,14
+    EDITTEXT        IDC_USER,120,209,170,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PASS,120,229,170,13,ES_PASSWORD | ES_AUTOHSCROLL
+    EDITTEXT        IDC_USER_EXTEN,120,269,170,13,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,15,305,50,14
+    PUSHBUTTON      "Apply",IDC_APPLY,120,305,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,240,305,50,14
     LTEXT           "SIP Outbound Proxy",IDC_STATIC,15,43,71,10
-    LTEXT           "User",IDC_STATIC,15,161,52,8
-    LTEXT           "Password",IDC_STATIC,15,179,52,10
-    GROUPBOX        "User Information",IDC_STATIC,7,137,293,101
-    LTEXT           "SIPTAPI: A TAPI Service Provider based on SIP",IDC_STATIC,15,271,201,8
+    LTEXT           "User",IDC_STATIC,15,214,52,8
+    LTEXT           "Password",IDC_STATIC,15,232,52,10
+    GROUPBOX        "User Information",IDC_STATIC,7,190,293,101
+    LTEXT           "SIPTAPI: A TAPI Service Provider based on SIP",IDC_STATIC,15,323,201,8
     LTEXT           "SIP Domain",IDC_STATIC,15,23,45,10
-    GROUPBOX        "SIP Configuration",IDC_STATIC,7,3,293,124
-    LTEXT           "For help and information got to www.ipcom.at",IDC_STATIC,15,278,161,8
-    GROUPBOX        "",IDC_STATIC,7,243,293,46
-    LTEXT           "v_0.2.14",IDC_STATIC,260,276,30,8
-    LTEXT           "User's extension (optional)",IDC_STATIC,15,220,105,9
-    CONTROL         "Reverse Mode (do not activate unless you really know what you are doing!)",IDC_CHECK_REVERSEMODE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,62,259,10
-    EDITTEXT        IDC_AUTHUSER,120,196,170,13,ES_AUTOHSCROLL
-    LTEXT           "Authentication-User (optional)",IDC_STATIC,15,200,100,9
-    CONTROL         "Auto Answer: Polycom, SNOM-old",IDC_AUTOANSWER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,94,124,10
-    CONTROL         "Auto Answer: Siemens, SNOM-new",IDC_AUTOANSWER2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,108,128,10
-    LTEXT           "Auto Answer (adds a SIP Header to indicate auto answer to phone, choose only one)",IDC_STATIC,15,80,274,8
+    GROUPBOX        "SIP Configuration",IDC_STATIC,7,3,293,157
+    LTEXT           "For help and information got to www.ipcom.at",IDC_STATIC,15,331,161,8
+    GROUPBOX        "",IDC_STATIC,7,297,293,46
+    LTEXT           "v0.2.15",IDC_STATIC,264,329,26,8
+    LTEXT           "User's extension (optional)",IDC_STATIC,15,273,105,9
+    CONTROL         "Reverse Mode (Call target first and transfer to local phone on answer)",IDC_CHECK_REVERSEMODE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,129,241,10
+    EDITTEXT        IDC_AUTHUSER,120,249,170,13,ES_AUTOHSCROLL
+    LTEXT           "Authentication-User (optional)",IDC_STATIC,15,253,100,9
+    CONTROL         "Auto Answer: Polycom, SNOM-old",IDC_AUTOANSWER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,76,124,10
+    CONTROL         "Auto Answer: Siemens, SNOM-new",IDC_AUTOANSWER2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,90,128,10
+    LTEXT           "Auto Answer (adds a SIP Header to indicate auto answer to phone, choose only one)",IDC_STATIC,15,62,274,8
+    CONTROL         "Don't send BYE (Always wait for the peer to send the BYE, except user hangs up)",IDC_CHECK_DONTSENDBYE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,145,277,10
+    LTEXT           "Advanced Options (do not activate unless you really know what you are doing!)",IDC_STATIC,15,114,256,8
 END
 
 
@@ -114,7 +117,7 @@ BEGIN
         VERTGUIDE, 120
         VERTGUIDE, 290
         TOPMARGIN, 7
-        BOTTOMMARGIN, 289
+        BOTTOMMARGIN, 343
         HORZGUIDE, 33
         HORZGUIDE, 53
         HORZGUIDE, 97
@@ -133,8 +136,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,2,14,0
- PRODUCTVERSION 0,2,14,0
+ FILEVERSION 0,2,15,0
+ PRODUCTVERSION 0,2,15,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -151,14 +154,14 @@ BEGIN
         BEGIN
             VALUE "Comments", "SIPTAPI - a TAPI service provider for the SIP"
             VALUE "CompanyName", "www.ipcom.at"
-            VALUE "FileDescription", "SIPTAPI Service Provider 0.2.14"
-            VALUE "FileVersion", "0, 2, 14, 0"
+            VALUE "FileDescription", "SIPTAPI Service Provider 0.2.15"
+            VALUE "FileVersion", "0, 2, 15, 0"
             VALUE "InternalName", "siptapi"
-            VALUE "LegalCopyright", "Copyright (C) 2004, 2005, 2006, 2009, 2010, 2011, 2012"
+            VALUE "LegalCopyright", "Copyright (C) 2004-2013"
             VALUE "LegalTrademarks", "Please see the copyright notice for further information"
             VALUE "OriginalFilename", "siptapi.tsp"
             VALUE "ProductName", "siptapi"
-            VALUE "ProductVersion", "0, 2, 14, 0"
+            VALUE "ProductVersion", "0, 2, 15, 0"
         END
     END
     BLOCK "VarFileInfo"
