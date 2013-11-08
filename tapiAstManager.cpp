@@ -418,11 +418,14 @@ DWORD tapiAstManager::processMessages(void)
 				break;
 			case 3:
 				TspTrace("Ongoing call = 3");
-				counter ++;
-				TspTrace("counter = '%i'", counter);
-				if (counter > 500) { //wait 500 cycles (25 sec) for NOTIFY, then send BYE anyway
-					this->dropChannel();
-					break;
+				//only hang up after timeout if DONTSENDBYE mode is not activated
+				if (this->dontSendBye == 0) {
+					counter ++;
+					TspTrace("counter = '%i'", counter);
+					if (counter > 500) { //wait 500 cycles (25 sec) for NOTIFY, then send BYE anyway
+						this->dropChannel();
+						break;
+					}
 				}
 				if (je != NULL) {
 					if (je->type == EXOSIP_CALL_CLOSED) {
@@ -502,7 +505,10 @@ DWORD tapiAstManager::processMessages(void)
 						if (i != 0) {
 							TspTrace("osip_message_get_body failed...\n");
 							eXosip_unlock();
-							this->dropChannel();
+							//only hang up if DONTSENDBYE mode is not activated
+							if (this->dontSendBye == 0) {
+								this->dropChannel();
+							}
 							break;
 						}
 						TspTrace("osip_message_get_body succeeded...\n");
@@ -517,8 +523,11 @@ DWORD tapiAstManager::processMessages(void)
 							eXosip_unlock();
 							break;
 						}
-						TspTrace("final response (or garbage) in NOTIFY body ... terminate call\n");
-						TspTrace("sending BYE (ToDo: check sipfrag response code)..");
+						TspTrace("final response (or garbage) in NOTIFY body ... terminate call, sending BYE\n");
+						//dont hang up if DONTSENDBYE is activated
+						if (this->dontSendBye == 1) {
+							break;
+						}
 						i = eXosip_call_terminate(je->cid, je->did);
 						if (i != 0) {
 							TspTrace("eXosip_call_terminate failed...");

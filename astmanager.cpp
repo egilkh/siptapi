@@ -52,6 +52,7 @@ astManager::astManager(void)
 	this->did = 0;
 
 	this->reverseMode=0;
+	this->dontSendBye=0;
 	this->dwCallState=LINECALLSTATE_UNKNOWN;
 	this->dwCallStateMode=0;
 }

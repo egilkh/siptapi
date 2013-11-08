@@ -1,5 +1,11 @@
 SIPTAPI Changelog
 
+v. 0.2.15
+- New option "Don't send BYE". If checked, SIPTAPI will not send BYE to terminate the outgoing call
+  (eg. after timeout receiving NOTIFY or receiving final NOTIFY), except if the user hangs up call via TAPI.
+  This feature is only useful, if your SIP proxy is actually not a real SIP proxy but some kind of application
+  layer glue, that just uses SIP messages to interact with SIPTAPI.
+
 v. 0.2.14
 - better handling of NOTIFYs after REFER: wait with sending BYE until NOTIFY with 
   final response in sipfrag body or until timeout happens
