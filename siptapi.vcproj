@@ -21,8 +21,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="temp\$(ConfigurationName)"
+			OutputDirectory="temp\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="temp\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
@@ -67,12 +67,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="WSOCK32.LIB ..\..\osip\libeXosip2\platform\vsnet\Debug\eXosip.lib ..\..\osip\libosip2\platform\vsnet\Debug\osip2.lib ..\..\osip\libosip2\platform\vsnet\Debug\osipparser2.lib Iphlpapi.lib ws2_32.lib Dnsapi.lib atls.lib"
-				OutputFile="$(OutDir)/siptapi.tsp"
+				OutputFile="deploy\$(PlatformName)\$(ConfigurationName)\siptapi.tsp"
 				Version="0.1"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				ModuleDefinitionFile="siptapi.def"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/siptapi.pdb"
+				ProgramDatabaseFile="$(OutDir)/$(TargetName).pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -103,7 +103,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="temp\$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="temp\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
@@ -150,12 +150,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="WSOCK32.LIB ..\..\osip\libeXosip2\platform\vsnet\x64\Debug\eXosip.lib ..\..\osip\libosip2\platform\vsnet\x64\Debug\osip2.lib ..\..\osip\libosip2\platform\vsnet\x64\Debug\osipparser2.lib Iphlpapi.lib ws2_32.lib Dnsapi.lib atls.lib"
-				OutputFile="$(OutDir)/siptapi.tsp"
+				OutputFile="deploy\$(PlatformName)\$(ConfigurationName)\siptapi.tsp"
 				Version="0.1"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				ModuleDefinitionFile="siptapi.def"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/siptapi.pdb"
+				ProgramDatabaseFile="$(OutDir)/$(TargetName).pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -186,8 +186,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="temp\$(ConfigurationName)"
+			OutputDirectory="temp\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="temp\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
@@ -229,11 +229,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="WSOCK32.LIB ..\..\osip\libeXosip2\platform\vsnet\Release\eXosip.lib ..\..\osip\libosip2\platform\vsnet\Release\osip2.lib ..\..\osip\libosip2\platform\vsnet\Release\osipparser2.lib Iphlpapi.lib ws2_32.lib Dnsapi.lib atls.lib"
-				OutputFile="$(OutDir)/siptapi.tsp"
+				OutputFile="deploy\$(PlatformName)\$(ConfigurationName)\siptapi.tsp"
 				Version="0.3"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				ModuleDefinitionFile="siptapi.def"
 				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)/$(TargetName).pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -266,7 +267,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="temp\$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="temp\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
@@ -310,11 +311,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="WSOCK32.LIB ..\..\osip\libeXosip2\platform\vsnet\x64\Release\eXosip.lib ..\..\osip\libosip2\platform\vsnet\x64\Release\osip2.lib ..\..\osip\libosip2\platform\vsnet\x64\Release\osipparser2.lib Iphlpapi.lib ws2_32.lib Dnsapi.lib atls.lib"
-				OutputFile="$(OutDir)/siptapi.tsp"
+				OutputFile="deploy\$(PlatformName)\$(ConfigurationName)\siptapi.tsp"
 				Version="0.3"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				ModuleDefinitionFile="siptapi.def"
 				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)/$(TargetName).pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
