@@ -91,6 +91,7 @@ class astManager
 
 		int reverseMode;
 		int dontSendBye;
+		int immediateSendBye;
 		int autoAnswer;
 		int autoAnswer2;
 		DWORD dwCallState;

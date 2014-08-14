@@ -502,9 +502,9 @@ LONG TSPIAPI TSPI_lineOpen(
 	        ourConnection->reverseMode = tempInt;
 		}
 		if (tempInt) {
-			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X reverse-mode activated\n", dwDeviceID);
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X reverse-mode activated", dwDeviceID);
 		} else {
-			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X reverse-mode  deactivated\n", dwDeviceID);
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X reverse-mode  deactivated", dwDeviceID);
 		}
 
 		if ( false == readConfigInt("dontsendbye", tempInt) ) {
@@ -514,9 +514,21 @@ LONG TSPIAPI TSPI_lineOpen(
 	        ourConnection->dontSendBye = tempInt;
 		}
 		if (tempInt) {
-			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X dontsendbye activated\n", dwDeviceID);
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X dontsendbye activated", dwDeviceID);
 		} else {
-			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X dontsendbye deactivated\n", dwDeviceID);
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X dontsendbye deactivated", dwDeviceID);
+		}
+
+		if ( false == readConfigInt("immediatesendbye", tempInt) ) {
+			TspTrace("Info: failed reading immediatesendbye, use 'off' ...");
+	        ourConnection->immediateSendBye = 0;
+		} else {
+	        ourConnection->immediateSendBye = tempInt;
+		}
+		if (tempInt) {
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X immediatesendbye activated", dwDeviceID);
+		} else {
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X immediatesendbye deactivated", dwDeviceID);
 		}
 
 		if ( false == readConfigInt("autoanswer", tempInt) ) {
@@ -526,9 +538,9 @@ LONG TSPIAPI TSPI_lineOpen(
 	        ourConnection->autoAnswer = tempInt;
 		}
 		if (tempInt) {
-			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X auto-answer activated\n", dwDeviceID);
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X auto-answer activated", dwDeviceID);
 		} else {
-			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X auto-answer deactivated\n", dwDeviceID);
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X auto-answer deactivated", dwDeviceID);
 		}
 
 		if ( false == readConfigInt("autoanswer2", tempInt) ) {
@@ -538,9 +550,9 @@ LONG TSPIAPI TSPI_lineOpen(
 	        ourConnection->autoAnswer2 = tempInt;
 		}
 		if (tempInt) {
-			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X auto-answer2 activated\n", dwDeviceID);
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X auto-answer2 activated", dwDeviceID);
 		} else {
-			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X auto-answer2 deactivated\n", dwDeviceID);
+			TspTrace("TSPI_lineOpen: dwDeviceID 0x%X auto-answer2 deactivated", dwDeviceID);
 		}
 
 		// initialize SIP stack
@@ -891,11 +903,11 @@ LONG TSPIAPI TSPI_lineGetCallStatus(
 		DWORD_IN_ENTRY(hdCall)
 	END_PARAM_TABLE()
 
-	TSPTRACE("TSPI_lineGetCallStatus: ERROR: pls->dwTotalSize      = %d\r\n",pls->dwTotalSize);
-	TSPTRACE("TSPI_lineGetCallStatus: ERROR: sizeof(LINECALLSTATUS)= %d\r\n",sizeof(LINECALLSTATUS));
+	TSPTRACE("TSPI_lineGetCallStatus: ERROR: pls->dwTotalSize      = %d",pls->dwTotalSize);
+	TSPTRACE("TSPI_lineGetCallStatus: ERROR: sizeof(LINECALLSTATUS)= %d",sizeof(LINECALLSTATUS));
 
 	if (sizeof(LINECALLSTATUS) > pls->dwTotalSize) {
-		TSPTRACE("TSPI_lineGetCallStatus: ERROR: sizeof(LINECALLSTATUS) > dwTotalSize\r\n");
+		TSPTRACE("TSPI_lineGetCallStatus: ERROR: sizeof(LINECALLSTATUS) > dwTotalSize");
 		return EPILOG(LINEERR_NOMEM);
 	}
 
@@ -925,7 +937,7 @@ LONG TSPIAPI TSPI_lineGetCallStatus(
 		astTspGlue *ourCall;
 		if ( ( ourCall = (*it).second->findCall(hdCall)) != NULL )
 		{
-			TSPTRACE("Found call - getting state\r\n");
+			TSPTRACE("Found call - getting state");
 			found = 1;
 			// richtiger callstate geht nicht, weil im astTspGlue das nicht drinnen steht!
 			//pls->dwCallState = ourCall->dwCallState;
@@ -1200,6 +1212,7 @@ LONG TSPIAPI TUISPI_providerInstall(
 		storeConfigString("exten", "");
 		storeConfigInt("reversemode", 0);
 		storeConfigInt("dontsendbye", 0);
+		storeConfigInt("immediatesendbye", 0);
 		storeConfigInt("autoanswer", 0);
 		storeConfigInt("autoanswer2", 0);
 	}
@@ -1326,6 +1339,8 @@ BOOL CALLBACK ConfigDlgProc(
 		CheckDlgButton(hwnd, IDC_CHECK_REVERSEMODE, tempInt);
 		readConfigInt("dontsendbye", tempInt);
 		CheckDlgButton(hwnd, IDC_CHECK_DONTSENDBYE, tempInt);
+		readConfigInt("immediatesendbye", tempInt);
+		CheckDlgButton(hwnd, IDC_CHECK_IMMEDIATESENDBYE, tempInt);
 		readConfigInt("autoanswer", tempInt);
 		CheckDlgButton(hwnd, IDC_AUTOANSWER, tempInt);
 		readConfigInt("autoanswer2", tempInt);
@@ -1366,6 +1381,9 @@ BOOL CALLBACK ConfigDlgProc(
 
 			tempInt = IsDlgButtonChecked(hwnd, IDC_CHECK_DONTSENDBYE);
 			storeConfigInt("dontsendbye", tempInt);
+
+			tempInt = IsDlgButtonChecked(hwnd, IDC_CHECK_IMMEDIATESENDBYE);
+			storeConfigInt("immediatesendbye", tempInt);
 
 			tempInt = IsDlgButtonChecked(hwnd, IDC_AUTOANSWER);
 			storeConfigInt("autoanswer", tempInt);

@@ -53,6 +53,7 @@ astManager::astManager(void)
 
 	this->reverseMode=0;
 	this->dontSendBye=0;
+	this->immediateSendBye=0;
 	this->dwCallState=LINECALLSTATE_UNKNOWN;
 	this->dwCallStateMode=0;
 }
@@ -421,6 +422,12 @@ DWORD astManager::originate(std::string destAddress)
 	}
 	TspTrace("eXosip_call_build_initial_invite succeeded");
 
+	// Set supported methods
+	i = osip_message_set_header(invite, "Allow", "INVITE, ACK, CANCEL, BYE, NOTIFY");
+	if (i != 0) {
+		TspTrace("osip_message_set_header Allow failed ...");
+	}
+
 	char tmp[4096];
 	char localip[128];
 	eXosip_guess_localip(AF_INET, localip, 128);
@@ -473,11 +480,11 @@ DWORD astManager::originate(std::string destAddress)
 	eXosip_lock();
 	i = eXosip_call_send_initial_invite(invite);
 	if (i == -1) {
-		TspTrace("eXosip_call_send_initial_invite failed: (bad arguments?)\n");
+		TspTrace("eXosip_call_send_initial_invite failed: (bad arguments?)");
 		this->ongoingcall = 0;
 		return LINEERR_CALLUNAVAIL;
 	}
-	TspTrace("eXosip_call_send_initial_invite returned: %i\n",i);
+	TspTrace("eXosip_call_send_initial_invite returned: %i",i);
 	this->cid = i;
 	this->ongoingcall = 1;
 	eXosip_unlock();
@@ -634,7 +641,7 @@ astEvent* astManager::waitForMessage(void)
 		//TSPTRACE("%s",rawMessage.c_str());
 
 	}
-	TSPTRACE("Found terminator\r\n");
+	TSPTRACE("Found terminator");
 
 	//When we get here we have a complete message which we need to split up 
 	//into a usable format (I suppose we could also keep as is - but I prefer it this way!)
@@ -652,7 +659,7 @@ astEvent* astManager::waitForMessage(void)
 			std::string data = line.substr(dataPos+2, line.length());
 			
 			// a little logging info
-			TSPTRACE("header: %s, data: %s\r\n",header.c_str(), data.c_str());
+			TSPTRACE("header: %s, data: %s",header.c_str(), data.c_str());
 
 			if ( header == "Event" )
 			{
@@ -814,7 +821,7 @@ DWORD astManager::dropConnection(void)
 */
 
 	TSPTRACE("...terminating eXosip2...");
-	TSPTRACE("...shutting down thread, set ongoing call to -1 ...");
+	TSPTRACE("...shutting down thread, set Call State to -1 ...");
 	this->ongoingcall = -1;
 	TSPTRACE("...shutting down thread, waiting 2 seconds for thread to exit ...");
 	Sleep(2000);
