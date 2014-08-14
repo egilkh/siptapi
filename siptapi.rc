@@ -83,10 +83,10 @@ BEGIN
     GROUPBOX        "User Information",IDC_STATIC,7,190,293,101
     LTEXT           "SIPTAPI: A TAPI Service Provider based on SIP",IDC_STATIC,15,323,201,8
     LTEXT           "SIP Domain",IDC_STATIC,15,23,45,10
-    GROUPBOX        "SIP Configuration",IDC_STATIC,7,3,293,157
+    GROUPBOX        "SIP Configuration",IDC_STATIC,7,3,293,177
     LTEXT           "For help and information got to www.ipcom.at",IDC_STATIC,15,331,161,8
     GROUPBOX        "",IDC_STATIC,7,297,293,46
-    LTEXT           "v0.2.15",IDC_STATIC,264,329,26,8
+    LTEXT           "v0.2.17",IDC_STATIC,264,329,26,8
     LTEXT           "User's extension (optional)",IDC_STATIC,15,273,105,9
     CONTROL         "Reverse Mode (Call target first and transfer to local phone on answer)",IDC_CHECK_REVERSEMODE,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,129,241,10
@@ -96,8 +96,10 @@ BEGIN
     CONTROL         "Auto Answer: Siemens, SNOM-new",IDC_AUTOANSWER2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,90,128,10
     LTEXT           "Auto Answer (adds a SIP Header to indicate auto answer to phone, choose only one)",IDC_STATIC,15,62,274,8
     CONTROL         "Don't send BYE (Always wait for the peer to send the BYE, except user hangs up)",IDC_CHECK_DONTSENDBYE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,145,277,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,160,277,10
     LTEXT           "Advanced Options (do not activate unless you really know what you are doing!)",IDC_STATIC,15,114,256,8
+    CONTROL         "Immediate BYE after REFER (Do not wait for NOTIFY with sipfrag 200 OK)",IDC_CHECK_IMMEDIATESENDBYE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,144,251,10
 END
 
 
@@ -136,8 +138,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,2,15,0
- PRODUCTVERSION 0,2,15,0
+ FILEVERSION 0,2,17,0
+ PRODUCTVERSION 0,2,17,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -154,14 +156,14 @@ BEGIN
         BEGIN
             VALUE "Comments", "SIPTAPI - a TAPI service provider for the SIP"
             VALUE "CompanyName", "www.ipcom.at"
-            VALUE "FileDescription", "SIPTAPI Service Provider 0.2.15"
-            VALUE "FileVersion", "0, 2, 15, 0"
+            VALUE "FileDescription", "SIPTAPI Service Provider 0.2.17"
+            VALUE "FileVersion", "0, 2, 17, 0"
             VALUE "InternalName", "siptapi"
-            VALUE "LegalCopyright", "Copyright (C) 2004-2013"
+            VALUE "LegalCopyright", "Copyright (C) 2004-2014"
             VALUE "LegalTrademarks", "Please see the copyright notice for further information"
             VALUE "OriginalFilename", "siptapi.tsp"
             VALUE "ProductName", "siptapi"
-            VALUE "ProductVersion", "0, 2, 15, 0"
+            VALUE "ProductVersion", "0, 2, 17, 0"
         END
     END
     BLOCK "VarFileInfo"

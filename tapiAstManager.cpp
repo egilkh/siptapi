@@ -38,7 +38,7 @@ Mutex tspMut;
 
 void dump_event(eXosip_event_t *je) {
 	char *type;
-	TspTrace("Event '%s' received...\n",je->textinfo);
+	TspTrace("Event '%s' received...",je->textinfo);
 	switch (je->type) {
 		case EXOSIP_REGISTRATION_NEW: type="EXOSIP_REGISTRATION_NEW  < announce new registration."; break;
 		case EXOSIP_REGISTRATION_SUCCESS: type="EXOSIP_REGISTRATION_SUCCESS  < user is successfully registred."; break;
@@ -97,25 +97,25 @@ void dump_event(eXosip_event_t *je) {
 		case EXOSIP_EVENT_COUNT: type="EXOSIP_EVENT_COUNT  < MAX number of events"; break;
 		default: type="unknown type - update tapiAstMAnager.cpp:dump_event()";
 	}
-	TspTrace("dump_event: Event type = '%s'...\n",type);
-	TspTrace("dump_event: event cid = %d\n",je->cid);
-	TspTrace("dump_event: event did = %d\n",je->did);
-	TspTrace("dump_event: event tid = %d\n",je->tid);
-	TspTrace("dump_event: event rid = %d\n",je->rid);
+	TspTrace("dump_event: Event type = '%s'...",type);
+	TspTrace("dump_event: event cid = %d",je->cid);
+	TspTrace("dump_event: event did = %d",je->did);
+	TspTrace("dump_event: event tid = %d",je->tid);
+	TspTrace("dump_event: event rid = %d",je->rid);
 
 	if (je->request != NULL) {
-		TspTrace("dump_event: request dumping ... \n");
-		TspTrace("dump_event: event->request: method = '%s'\n",je->request->sip_method);
-		TspTrace("dump_event: request dumping ... done\n");
+		TspTrace("dump_event: request dumping ... ");
+		TspTrace("dump_event: event->request: method = '%s'",je->request->sip_method);
+		TspTrace("dump_event: request dumping ... done");
 	}
 
 	if (je->response != NULL) {
-		TspTrace("dump_event: response dumping ... \n");
-		TspTrace("dump_event: event->response: status code = '%d'\n",je->response->status_code);
-		TspTrace("dump_event: response dumping ... done\n");
+		TspTrace("dump_event: response dumping ... ");
+		TspTrace("dump_event: event->response: status code = '%d'",je->response->status_code);
+		TspTrace("dump_event: response dumping ... done");
 	}
 
-	TspTrace("dump_event: ... done\n");
+	TspTrace("dump_event: ... done");
 
 }
 
@@ -165,14 +165,82 @@ DWORD tapiAstManager::processMessages(void)
 			dump_event(je);
 		}
 
+		// If there is an incoming INVITE, response with 200 OK
+		if (je != NULL) {
+			if (je->type == EXOSIP_CALL_REINVITE) {
+				TspTrace("EXOSIP_CALL_REINVITE received: (cid=%i did=%i tid=%i) '%s'",je->cid,je->did,je->tid,je->textinfo);
+				if (0 == osip_strcasecmp (je->request->sip_method, "INVITE")) {
+					osip_message_t *answer;
+					eXosip_lock();
+					TspTrace("building 200 answer to %s ...", je->request->sip_method);
+					if (0 != eXosip_call_build_answer(je->tid, 200, &answer)) {
+						TspTrace("eXosip_call_build_answer failed ...");
+					} else {
+						TspTrace("eXosip_call_build_answer succeeded...");
+						char tmp[4096];
+						char localip[128];
+						eXosip_guess_localip(AF_INET, localip, 128);
+						TspTrace("localip = '%s'", localip);
+						_snprintf(tmp, 4096,
+							"v=0\r\n"
+							"o=click2dial 0 0 IN IP4 %s\r\n"
+							"s=click2dial call\r\n"
+							"c=IN IP4 %s\r\n"
+							"t=0 0\r\n"
+							"m=audio %s RTP/AVP 0 8 18 3 4 9 15 97 98\r\n"
+							"a=rtpmap:0 PCMU/8000\r\n"
+							"a=rtpmap:18 G729/8000\r\n"
+							"a=rtpmap:97 ilbc/8000\r\n"
+							"a=rtpmap:98 speex/8000\r\n",
+							localip, localip, "8000");
+						TspTrace("SDP = '%s'", tmp);
+						osip_message_set_body(answer, tmp, strlen(tmp));
+						osip_message_set_content_type(answer, "application/sdp");
+
+						if (0 != eXosip_call_send_answer(je->tid, 200, answer)) {
+							TspTrace("eXosip_call_send_answer failed...");
+						} else {
+							TspTrace("sending answer ... done");
+						}
+					}
+					eXosip_event_free(je);
+					continue;
+				}
+			}
+		}
+
+		// If there is an incoming request, check if method is supported
+		if (je != NULL) {
+			if (je->type == EXOSIP_CALL_MESSAGE_NEW) {
+				TspTrace("EXOSIP_CALL_MESSAGE_NEW received: (cid=%i did=%i tid=%i) '%s'",je->cid,je->did,je->tid,je->textinfo);
+				if (0 != osip_strcasecmp (je->request->sip_method, "NOTIFY")) {
+					osip_message_t *answer;
+					eXosip_lock();
+					TspTrace("building 405 answer to %s ...", je->request->sip_method);
+					if (0 != eXosip_call_build_answer(je->tid, 405, &answer)) {
+						TspTrace("eXosip_call_build_answer failed ...");
+					} else {
+						TspTrace("eXosip_call_build_answer succeeded...");
+						if (0 != eXosip_call_send_answer(je->tid, 405, answer)) {
+							TspTrace("eXosip_call_send_answer failed...");
+						} else {
+							TspTrace("sending answer ... done");
+						}
+					}
+					eXosip_event_free(je);
+					continue;
+				}
+			}
+		}
+
 //		TspTrace("this->ongoingcall before switch() = '%i'",this->ongoingcall);
 //		std::string referto;
 		switch(this->ongoingcall) {
 			case 0:
-				TspTrace("No ongoing call, doing nothing...\n");
+				TspTrace("No ongoing call, doing nothing...");
 				break;
 			case 1:
-				TspTrace("Ongoing call = 1");
+				TspTrace("Call State = 1");
 				if (je != NULL) {
 					if (je->type == EXOSIP_CALL_TIMEOUT) {
 						TspTrace("EXOSIP_CALL_TIMEOUT received: (cid=%i did=%i) '%s'",je->cid,je->did,je->textinfo);
@@ -321,7 +389,7 @@ DWORD tapiAstManager::processMessages(void)
 				}
 				break;
 			case 2:
-				TspTrace("Ongoing call = 2");
+				TspTrace("Call State = 2");
 				counter ++;
 				if (je != NULL) {
 					if (je->type == EXOSIP_CALL_CLOSED) {
@@ -417,7 +485,7 @@ DWORD tapiAstManager::processMessages(void)
 				}
 				break;
 			case 3:
-				TspTrace("Ongoing call = 3");
+				TspTrace("Call State = 3");
 				//only hang up after timeout if DONTSENDBYE mode is not activated
 				if (this->dontSendBye == 0) {
 					counter ++;
@@ -487,23 +555,45 @@ DWORD tapiAstManager::processMessages(void)
 						// respond to NOTIFY with 200 OK
 						osip_message_t *answer;
 						eXosip_lock();
-						TspTrace("building answer to NOTIFY ...\n");
+						TspTrace("building answer to NOTIFY ...");
 						if (0 != eXosip_call_build_answer(je->tid, 200, &answer)) {
-							TspTrace("eXosip_call_build_answer failed...\n");
+							TspTrace("eXosip_call_build_answer failed...");
 						} else {
-							TspTrace("eXosip_call_build_answer succeeded...\n");
+							TspTrace("eXosip_call_build_answer succeeded...");
 							if (0 != eXosip_call_send_answer(je->tid, 200, answer)) {
-								TspTrace("eXosip_call_send_answer failed...\n");
+								TspTrace("eXosip_call_send_answer failed...");
 							} else {
-								TspTrace("sending answer ... done\n");
+								TspTrace("sending answer ... done");
 							}
+						}
+
+						// hang up after first NOTIFY if configured
+						if (this->immediateSendBye) {
+							TspTrace("immediateSendBye is TRUE -> hang up...");
+							i = eXosip_call_terminate(je->cid, je->did);
+							if (i != 0) {
+								TspTrace("immediateSendBye eXosip_call_terminate failed...");
+								eXosip_unlock();
+								break;
+							}
+							eXosip_unlock();
+							TspTrace("immediateSendBye eXosip_call_terminate succeeded...");
+							if ( this->lineEvent != 0 ) {
+								TSPTRACE("sending LINECALLSTATE_DISCONNECTED ...");
+								dwCallState=LINECALLSTATE_DISCONNECTED;
+								dwCallStateMode=0;
+								this->lineEvent( this->htLine, this->htCall,
+									LINE_CALLSTATE, LINECALLSTATE_DISCONNECTED,
+									0, 0 /*or should iI use LINEMEDIAMODE_UNKNOWN ?*/);
+							}
+							break;
 						}
 
 						// check sipfrag response code, >=200 is final response which will cause a BYE
 						osip_body_t *body = NULL;
 						i = osip_message_get_body(je->request, 0, &body);
 						if (i != 0) {
-							TspTrace("osip_message_get_body failed...\n");
+							TspTrace("osip_message_get_body failed...");
 							eXosip_unlock();
 							//only hang up if DONTSENDBYE mode is not activated
 							if (this->dontSendBye == 0) {
@@ -511,19 +601,19 @@ DWORD tapiAstManager::processMessages(void)
 							}
 							break;
 						}
-						TspTrace("osip_message_get_body succeeded...\n");
+						TspTrace("osip_message_get_body succeeded...");
 						if (body == NULL) {
-							TspTrace("no body in NOTIFY ... ignore this NOTIFY and wait for next NOTIFY\n");
+							TspTrace("no body in NOTIFY ... ignore this NOTIFY and wait for next NOTIFY");
 							eXosip_unlock();
 							break;
 						}
-						TspTrace("bodylen=%d, body is: %.*s\n", body->length, body->length, body->body);
+						TspTrace("bodylen=%d, body is: %.*s", body->length, body->length, body->body);
 						if ( !strncmp(body->body, "SIP/2.0 1", min(body->length, 9)) ) {
-							TspTrace("provisional response in NOTIFY body ... ignore this NOTIFY and wait for next NOTIFY\n");
+							TspTrace("provisional response in NOTIFY body ... ignore this NOTIFY and wait for next NOTIFY");
 							eXosip_unlock();
 							break;
 						}
-						TspTrace("final response (or garbage) in NOTIFY body ... terminate call, sending BYE\n");
+						TspTrace("final response (or garbage) in NOTIFY body ... terminate call, sending BYE");
 						//dont hang up if DONTSENDBYE is activated
 						if (this->dontSendBye == 1) {
 							break;

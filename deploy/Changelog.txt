@@ -1,5 +1,16 @@
 SIPTAPI Changelog
 
+v. 0.2.17
+- Fix CRLF in log file
+- Set Allow header on outgoing INVITE to suppress incoming UPDATEs
+- Correctly handle incoming reINVITE (send 200 OK with fake SDP)
+- Refuse all other requests (except reINVITE and NOTIFY) with 405
+
+v. 0.2.16
+- New option "Immediate BYE". If checked, after REFER, SIPTAPI will not wait 
+  for a NOTIFY with sipfrag "200 OK" to send the BYE but instead the BYE will
+  be sent immediately after receiving the final response on the REFER.
+
 v. 0.2.15
 - New option "Don't send BYE". If checked, SIPTAPI will not send BYE to terminate the outgoing call
   (eg. after timeout receiving NOTIFY or receiving final NOTIFY), except if the user hangs up call via TAPI.

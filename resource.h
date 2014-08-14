@@ -27,6 +27,7 @@
 #define IDC_ICHREGEX                    1014
 #define IDC_AUTOANSWER2                 1014
 #define IDC_CHECK_DONTSENDBYE           1015
+#define IDC_CHECK_IMMEDIATESENDBYE      1016
 
 // Next default values for new objects
 // 

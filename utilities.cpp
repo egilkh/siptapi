@@ -213,7 +213,7 @@ bool readConfigInt(std::string item, DWORD &value)
 static
 void DumpParams(FUNC_INFO* pInfo, ParamDirection dir)
 {
-    TSPTRACE("  %s parameters:\n", (dir == dirIn ? "in" : "out"));
+    TSPTRACE("  %s parameters:", (dir == dirIn ? "in" : "out"));
 
     FUNC_PARAM* begin = &pInfo->rgParams[0];
     FUNC_PARAM* end = &pInfo->rgParams[pInfo->dwNumParams];
@@ -233,7 +233,7 @@ void DumpParams(FUNC_INFO* pInfo, ParamDirection dir)
                     sz[MAX_PATH] = 0;
                 }
 
-                TSPTRACE("    %s= 0x%lx '%s'\n", pParam->pszVal, pParam->dwVal, sz);
+                TSPTRACE("    %s= 0x%lx '%s'", pParam->pszVal, pParam->dwVal, sz);
             }
             break;
 
@@ -241,11 +241,11 @@ void DumpParams(FUNC_INFO* pInfo, ParamDirection dir)
             default:
                 if( dir == dirIn )
                 {
-                    TSPTRACE("    %s= 0x%lx\n", pParam->pszVal, pParam->dwVal);
+                    TSPTRACE("    %s= 0x%lx", pParam->pszVal, pParam->dwVal);
                 }
                 else
                 {
-                    TSPTRACE("    %s= 0x%lx '0x%lx'\n", pParam->pszVal, pParam->dwVal, (pParam->dwVal ? *(DWORD*)pParam->dwVal : 0));
+                    TSPTRACE("    %s= 0x%lx '0x%lx'", pParam->pszVal, pParam->dwVal, (pParam->dwVal ? *(DWORD*)pParam->dwVal : 0));
                 }
             break;
             }
@@ -258,7 +258,7 @@ void Prolog(FUNC_INFO* pInfo)
     char    sz[MAX_PATH+1];
     GetModuleFileName(0, sz, MAX_PATH);
 
-    TSPTRACE("%s() from %s\n", pInfo->pszFuncName, sz);
+    TSPTRACE("%s() from %s", pInfo->pszFuncName, sz);
     DumpParams(pInfo, dirIn);
 }
 
@@ -266,7 +266,7 @@ LONG Epilog(FUNC_INFO* pInfo, LONG tr)
 {
 
     DumpParams(pInfo, dirOut);
-    TSPTRACE("%s() returning 0x%x\n\n", pInfo->pszFuncName, tr);
+    TSPTRACE("%s() returning 0x%x\r\n", pInfo->pszFuncName, tr);
     return tr;
 }
 
@@ -289,6 +289,7 @@ void TspTrace(LPCSTR pszFormat, ...)
     //DWORD   err = GetLastError();
     DWORD   nBytes;
     WriteFile(hFile, buf, strlen(buf), &nBytes, 0);
+    WriteFile(hFile, "\r\n", 2, &nBytes, 0);
     CloseHandle(hFile);
 
 #endif
